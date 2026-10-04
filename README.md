@@ -8,7 +8,7 @@ Sistem hiçbir arka uç (backend) veya veritabanı sunucusu gerektirmez. Tüm ve
 ## ✨ Öne Çıkan Özellikler
 
 * 🚀 **Sıfır Kurulum & Sunucusuz Yapı:** Sadece HTML dosyasını açmanız yeterlidir. İnternet bağlantısı olmasa bile tüm liste, notlar ve kurallar çalışmaya devam eder.
-* 📱 **Mobil Uygulama (PWA) Desteği:** Telefon tarayıcısından açıp "Ana Ekrana Ekle" denildiğinde, tam ekran native bir mobil uygulama gibi çalışır. Sahada kullanım için idealdir.
+* 📱 **Mobil Uygulama Desteği:** Telefon tarayıcısından açıp "Ana Ekrana Ekle" diyeyebilirsiniz. Sahada kullanım için idealdir.
 * 📍 **Akıllı Bölge Otomasyonu (Regex Engine):** Adres metinlerindeki kelimeleri tarayarak (Örn: "Kadosan", "İMES") işletmeyi doğru sanayi bölgesine otomatik atar. Kurallar tamamen özelleştirilebilir.
 * 📊 **Gelişmiş Çoklu Filtreleme:** Öğretmen, Bölge, Sınıf ve Dal bazlı çoklu seçim (multi-select) ile 1000+ satırlık verilerde milisaniyeler içinde süzme işlemi yapar. Sayfayı dondurmaz.
 * 💾 **Akıllı Excel Yükleme:** Milli Eğitim sistemlerinden alınan Excel listelerini içeri aktarır. Aynı öğrenci numarası (Öğr.No) ile yüklenen listelerde mükerrer kayıt oluşturmaz, sadece değişen verileri günceller.
