@@ -1,6 +1,7 @@
 # MESEM-Portal
 
 İlk kullanım
+
 Ana ekran simgesinden uygulamayı açın.
 Excel Yükle ile öğrenci listenizi içeri aktarın. Veriler yalnızca o telefonun tarayıcısında saklanır, GitHub'a gitmez.
 Aynı Excel'i başka bir cihazda da yüklerseniz o cihazda ayrı bir liste oluşur. Elle yaptığınız düzenlemeleri (not, koordinat, bölge) taşımak için Tam Yedek ile JSON indirip diğer cihazda Yedek Yükle'yi kullanın.
@@ -13,5 +14,3 @@ Adres değişirse veri kaybolur. Tarayıcı verisi adrese bağlıdır. Kullanıc
 Düzenli yedek alın. Tarayıcı verisini temizlerseniz ya da telefonu sıfırlarsanız liste gider. Ayda bir Tam Yedek alıp Drive'a veya e-postanıza atmanız iyi olur.
 Depo herkese açıktır. İçinde yalnızca boş uygulama var, öğrenci bilgisi yok. Yine de bu yüzden depoya hiçbir kişisel veri dosyası yüklemeyin ve adresi herkese dağıtmayın.
 Çevrimdışı çalışmaz. Excel, PDF ve ikon kütüphaneleri internetten geliyor. Bağlantı yokken tablo açılabilir ama bu özellikler çalışmayabilir.
-
-İsterseniz bu adımları ve notları Word belgesi olarak da hazırlayabilirim. Daha önce istediğiniz değerlendirme raporuyla tek belgede birleştirmem de mümkün.
