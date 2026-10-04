@@ -1,21 +1,51 @@
-# MESEM-Portal
+# 🏫 MESEM Portal
+**Mesleki Eğitim Merkezleri (MESEM) için Sunucusuz, Çevrimdışı Çalışabilen Koordinatörlük Yönetim Sistemi**
 
-İlk kullanım
+Bu proje, meslek liseleri ve MESEM koordinatör öğretmenlerinin sahada yaşadığı zorlukları (dosya karmaşası, adres bulamama, rotalama zorluğu) çözmek amacıyla tasarlanmış **tek dosyalık (Single HTML)** bir web uygulamasıdır. 
 
-1. Ana ekran simgesinden uygulamayı açın.
-2. Excel Yükle ile öğrenci listenizi içeri aktarın. Veriler yalnızca o telefonun tarayıcısında saklanır, GitHub'a gitmez.
-3. Aynı Excel'i başka bir cihazda da yüklerseniz o cihazda ayrı bir liste oluşur. Elle yaptığınız düzenlemeleri (not, koordinat, bölge) taşımak için Tam Yedek ile JSON indirip diğer cihazda Yedek Yükle'yi kullanın.
+Sistem hiçbir arka uç (backend) veya veritabanı sunucusu gerektirmez. Tüm veriler %100 güvenli bir şekilde kullanıcının kendi tarayıcısında (Local Storage) tutulur.
 
-   
-Güncelleme yapmak (V15 vb.)
+## ✨ Öne Çıkan Özellikler
 
-Depoda Add file → Upload files ile yeni dosyayı yine index.html adıyla yükleyin, eski dosyanın üzerine yazılır. Birkaç dakika sonra yeni sürüm yayında olur. Telefonda eski hâli görürseniz sayfayı kapatıp yeniden açın. Verileriniz silinmez, çünkü adres aynı kalır.
+* 🚀 **Sıfır Kurulum & Sunucusuz Yapı:** Sadece HTML dosyasını açmanız yeterlidir. İnternet bağlantısı olmasa bile tüm liste, notlar ve kurallar çalışmaya devam eder.
+* 📱 **Mobil Uygulama (PWA) Desteği:** Telefon tarayıcısından açıp "Ana Ekrana Ekle" denildiğinde, tam ekran native bir mobil uygulama gibi çalışır. Sahada kullanım için idealdir.
+* 📍 **Akıllı Bölge Otomasyonu (Regex Engine):** Adres metinlerindeki kelimeleri tarayarak (Örn: "Kadosan", "İMES") işletmeyi doğru sanayi bölgesine otomatik atar. Kurallar tamamen özelleştirilebilir.
+* 📊 **Gelişmiş Çoklu Filtreleme:** Öğretmen, Bölge, Sınıf ve Dal bazlı çoklu seçim (multi-select) ile 1000+ satırlık verilerde milisaniyeler içinde süzme işlemi yapar. Sayfayı dondurmaz.
+* 💾 **Akıllı Excel Yükleme:** Milli Eğitim sistemlerinden alınan Excel listelerini içeri aktarır. Aynı öğrenci numarası (Öğr.No) ile yüklenen listelerde mükerrer kayıt oluşturmaz, sadece değişen verileri günceller.
+* 🗺️ **Nokta Atışı Konum:** Açık adreslerin yanı sıra enlem/boylam koordinat (Örn: `41.005, 29.164`) girişi destekler. Tek tıkla Google Haritalar'da hedefe yönlendirir.
+* 🖨️ **Gelişmiş Raporlama:** Ekranda filtrelenmiş aktif listeyi saniyeler içinde **Excel** veya Türkçe karakter uyumlu **PDF** olarak dışa aktarır. Temiz A4 yazdırma (Print) moduna sahiptir.
+* 🔄 **Tam Yedekleme:** Kurallar ve aktif veriler JSON formatında yedeklenip başka cihazlara tek tıkla aktarılabilir.
 
-Dikkat edilecekler
-Adres değişirse veri kaybolur. Tarayıcı verisi adrese bağlıdır. Kullanıcı adını veya depo adını sonradan değiştirirseniz telefondaki liste görünmez olur. Değiştirmeden önce Tam Yedek alın.
+## 🛠️ Kurulum ve Kullanım
 
-Düzenli yedek alın. Tarayıcı verisini temizlerseniz ya da telefonu sıfırlarsanız liste gider. Ayda bir Tam Yedek alıp Drive'a veya e-postanıza atmanız iyi olur.
+Sistem bağımsız bir frontend aracıdır. Kullanmak için bilgisayarınıza veya sunucuya hiçbir şey kurmanıza gerek yoktur.
 
-Depo herkese açıktır. İçinde yalnızca boş uygulama var, öğrenci bilgisi yok.
+1. Bu depodaki HTML dosyasını indirin.
+2. Dosyaya çift tıklayarak herhangi bir tarayıcıda (Chrome, Edge, Safari vb.) açın.
+3. **"Excel Yükle"** butonuna basarak elinizdeki öğrenci/işletme listesini sisteme dahil edin.
 
-Çevrimdışı çalışmaz. Excel, PDF ve ikon kütüphaneleri internetten geliyor. Bağlantı yokken tablo açılabilir ama bu özellikler çalışmayabilir.
+### 📱 Mobilde Kullanım
+Dosyayı telefonunuza gönderin ve mobil tarayıcıda açın. Tarayıcı menüsünden **"Ana Ekrana Ekle"** seçeneğine dokunun. Uygulama telefonunuza yüklenecektir.
+
+## 📁 Excel Veri Şablonu
+
+İçeri aktarılacak Excel dosyasındaki başlıkların (ilk satır) sistem tarafından otomatik tanınması için aşağıdaki formatta (veya benzer varyasyonlarda) olması tavsiye edilir:
+
+* `Öğr.No` (veya Öğrenci No, No) -> Zorunlu benzersiz anahtar
+* `Ad Soyad` 
+* `Sınıf` 
+* `Dal`
+* `Öğretmen` 
+* `Firma Adı` (veya İşletme, Tespit Edilen Firma)
+* `İşyeri Adresi` (veya Adres, Temiz Adres)
+* `Notlar` (Opsiyonel)
+* `Koordinat` (Opsiyonel)
+
+## 💻 Kullanılan Teknolojiler
+* **HTML5, CSS3, Vanilla JavaScript** (Framework kullanılmamıştır, maksimum hız hedeflenmiştir.)
+* **SheetJS** - Excel içe/dışa aktarım işlemleri için.
+* **jsPDF & jsPDF-AutoTable** - PDF raporlama işlemleri için.
+* **FontAwesome** - Vektörel ikonlar.
+
+## 🤝 Katkıda Bulunma
+Projeyi geliştirmek, hata bildirmek veya yeni özellik önermek isterseniz Pull Request oluşturabilir veya Issues sekmesini kullanabilirsiniz. Eğitim camiasına faydalı olması dileğiyle!
