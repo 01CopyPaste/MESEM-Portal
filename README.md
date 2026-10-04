@@ -16,6 +16,6 @@ Adres değişirse veri kaybolur. Tarayıcı verisi adrese bağlıdır. Kullanıc
 
 Düzenli yedek alın. Tarayıcı verisini temizlerseniz ya da telefonu sıfırlarsanız liste gider. Ayda bir Tam Yedek alıp Drive'a veya e-postanıza atmanız iyi olur.
 
-Depo herkese açıktır. İçinde yalnızca boş uygulama var, öğrenci bilgisi yok. Yine de bu yüzden depoya hiçbir kişisel veri dosyası yüklemeyin ve adresi herkese dağıtmayın.
+Depo herkese açıktır. İçinde yalnızca boş uygulama var, öğrenci bilgisi yok.
 
 Çevrimdışı çalışmaz. Excel, PDF ve ikon kütüphaneleri internetten geliyor. Bağlantı yokken tablo açılabilir ama bu özellikler çalışmayabilir.
