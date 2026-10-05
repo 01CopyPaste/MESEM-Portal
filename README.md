@@ -1,71 +1,39 @@
 💼 MESEM Portal
 
-Mesleki Eğitim Merkezleri (MESEM) koordinatör öğretmenleri için geliştirilmiş, tamamen tarayıcı üzerinde çalışan, sunucusuz (serverless) ve çevrimdışı destekli (PWA) öğrenci ve işletme takip otomasyonu.
+Mesleki Eğitim Merkezleri (MESEM) koordinatör öğretmenleri için geliştirilmiş; sunucusuz, çevrimdışı (offline) çalışabilen ve Excel entegreli öğrenci/işletme takip uygulaması.
 
-Bu proje, dışa bağımlılıkları minimumda tutarak tek bir HTML dosyası içerisinde gelişmiş bir "Single Page Application (SPA)" deneyimi sunmayı hedefler.
+Tamamen tek bir HTML dosyası (Single Page Application) olarak tasarlanmıştır. Kurulum, veritabanı veya sunucu gerektirmez.
 
-✨ Öne Çıkan Özellikler
+✨ Temel Özellikler
 
-🚀 Sunucusuz & Çok Hızlı: Herhangi bir veritabanı veya backend kurulumu gerektirmez. Tüm veriler tarayıcınızın localStorage alanında güvenle tutulur.
+🚀 Anında Kullanım: MESEM_Portal.html dosyasını tarayıcınızda açmanız yeterlidir. Tüm veriler tarayıcınızın belleğinde (localStorage) güvenle tutulur.
 
-📱 PWA (Progressive Web App): Çevrimdışı (offline) çalışabilir. Telefonunuza, tabletinize veya bilgisayarınıza yerel bir uygulama gibi yüklenebilir.
+📊 Excel Desteği: Saniyeler içinde yüzlerce öğrenci kaydını Excel'den içe aktarın veya yedekleyin. Çift kayıtları (duplicate) otomatik tespit eder.
 
-📊 Excel Entegrasyonu: Yüzlerce veya binlerce öğrenci kaydını (SheetJS kullanarak) saniyeler içinde içe/dışa aktarabilirsiniz. Çift kayıtları (duplicate) akıllıca tespit eder ve günceller.
+🤖 Akıllı Kural Motoru: Öğrenci adreslerindeki anahtar kelimeleri analiz ederek onları otomatik olarak ilgili "Bölgelere" atar.
 
-🤖 Akıllı Bölge Kural Motoru: Öğrenci/İşletme adreslerindeki metinleri Regex (Düzenli İfadeler) ile analiz ederek, öğrencileri otomatik olarak doğru "Bölgelere" atayan dinamik bir kural motoru içerir.
+📱 PWA (Uygulama) Desteği: İnternet olmadan da çalışır. Telefona, tablete veya bilgisayara yerel bir uygulama gibi yüklenebilir.
 
-🔍 Gelişmiş Arama & Filtreleme: Olay Temsilciliği (Event Delegation) tabanlı yüksek performanslı arama çubuğu ve Öğretmen, Bölge, Sınıf, Dal bazlı akıllı Multi-Select filtreler.
+🔍 Gelişmiş Filtreleme: Öğretmen, bölge, sınıf ve dal bazlı akıllı filtreler ve anlık arama motoru.
 
-💾 Tam Yedekleme & Arşiv: Öğrencileri silmek yerine arşivleyebilme, sistemin o anki tam durumunu (kurallar dahil) JSON formatında dışa aktarma ve geri yükleme imkanı.
+🗺️ Harita Entegrasyonu: İşletme adreslerini ve özel koordinatları tek tıkla Google Maps üzerinde açın.
 
-🗺️ Google Maps Entegrasyonu: İşletme adreslerini veya özel koordinatları tek tıkla haritada açma.
+🛠️ Nasıl Kullanılır?
 
-🖨️ Özelleştirilmiş Yazdırma Görünümü: Tabloları yazdırırken gereksiz butonları ve ID'leri gizleyen temiz CSS @media print tasarımı.
+Projedeki güncel MESEM_Portal_V24.html dosyasını bilgisayarınıza indirin.
 
-🛠️ Kullanılan Teknolojiler
+Dosyaya çift tıklayarak herhangi bir modern web tarayıcısında (Chrome, Safari, Edge vb.) açın.
 
-HTML5 & CSS3: Modern, esnek (Flexbox/Grid) ve mobil uyumlu (Responsive) arayüz.
+İşte bu kadar! Kurallarınızı oluşturup hemen kullanmaya başlayabilirsiniz.
 
-Vanilla JavaScript (ES6+): Framework (React, Vue vb.) kullanılmadan, Closure mimarisi ve DOM optimizasyonları ile geliştirilmiş saf Javascript gücü.
+💻 Teknolojiler
 
-SheetJS (xlsx): İstemci tarafında Excel dosyası okuma ve yazma işlemleri için.
+Arayüz: HTML5, CSS3 (Responsive & Mobile-first)
 
-FontAwesome: İkon setleri için.
+Mantık: Vanilla JavaScript (ES6+, Framework kullanılmamıştır)
 
-🚀 Kurulum ve Kullanım
-
-Bu uygulama hiçbir sunucu mimarisine ihtiyaç duymaz. Kullanmaya başlamak dünyanın en kolay işidir:
-
-Bu depoyu klonlayın veya doğrudan repo içindeki MESEM_Portal_V24.html (veya güncel sürüm) dosyasını indirin.
-
-İndirdiğiniz HTML dosyasına çift tıklayarak modern bir web tarayıcısında (Chrome, Edge, Safari, Firefox vb.) açın.
-
-İşte bu kadar! Kurallarınızı oluşturmaya ve Excel'den verilerinizi yüklemeye başlayabilirsiniz.
-
-🧠 Teknik Mimari ve Geliştirici Notları
-
-Proje tek bir dosya olmasına rağmen "Spagetti Kod" oluşumunu engellemek için kurumsal standartlarda yazılmıştır:
-
-Closure ve Scope Yönetimi: Tüm Javascript mantığı DOMContentLoaded içinde bir IIFE (Immediately Invoked Function Expression) benzeri yapı ile sarmalanarak global 'window' kirliliği önlenmiştir.
-
-DOM Optimizasyonu: Yüzlerce veriyi ekrana çizerken tarayıcının donmaması için innerHTML += döngüleri yerine, HTML string'leri bir Array içerisinde (bellekte) toplanıp .join('') metoduyla tek seferde render edilmektedir (Minimize Reflow/Repaint).
-
-Event Delegation: Tablo satırları veya liste öğeleri gibi dinamik çoğalan elementlere tek tek "event listener" eklemek yerine, kapsayıcı (parent) elementler üzerinden dinleme yapılarak yüksek performans sağlanmıştır.
-
-🤝 Katkıda Bulunma
-
-Eğitim kurumlarına destek olmak veya projeyi geliştirmek isterseniz pull request'lerinizi bekliyoruz! Lütfen PR göndermeden önce kodun mevcut mimarisine (Single File ve Vanilla JS) sadık kaldığınızdan emin olun.
-
-Bu repoyu forklayın
-
-Kendi feature branch'inizi oluşturun (git checkout -b feature/YeniOzellik)
-
-Değişikliklerinizi commit edin (git commit -m 'Harika bir özellik eklendi')
-
-Branch'inizi pushlayın (git push origin feature/YeniOzellik)
-
-Bir Pull Request oluşturun.
+Araçlar: SheetJS (Excel okuma/yazma), FontAwesome (İkonlar)
 
 📄 Lisans
 
-Bu proje eğitimcilerin işini kolaylaştırmak amacıyla açık kaynak olarak geliştirilmiştir. Kendi ihtiyaçlarınıza göre özgürce değiştirebilir ve kullanabilirsiniz (MIT License).
+Eğitimcilerin işini kolaylaştırmak amacıyla MIT Lisansı ile açık kaynak olarak geliştirilmiştir. Özgürce kullanabilir ve geliştirebilirsiniz.
