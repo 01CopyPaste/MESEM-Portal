@@ -1,51 +1,71 @@
-# 🏫 MESEM Portal
-**Mesleki Eğitim Merkezleri (MESEM) için Sunucusuz, Çevrimdışı Çalışabilen Koordinatörlük Yönetim Sistemi**
+💼 MESEM Portal - Gelişmiş Koordinatörlük Sistemi
 
-Bu proje, meslek liseleri ve MESEM koordinatör öğretmenlerinin sahada yaşadığı zorlukları (dosya karmaşası, adres bulamama, rotalama zorluğu) çözmek amacıyla tasarlanmış **tek dosyalık (Single HTML)** bir web uygulamasıdır. 
+Mesleki Eğitim Merkezleri (MESEM) koordinatör öğretmenleri için geliştirilmiş, tamamen tarayıcı üzerinde çalışan, sunucusuz (serverless) ve çevrimdışı destekli (PWA) öğrenci ve işletme takip otomasyonu.
 
-Sistem hiçbir arka uç (backend) veya veritabanı sunucusu gerektirmez. Tüm veriler %100 güvenli bir şekilde kullanıcının kendi tarayıcısında (Local Storage) tutulur.
+Bu proje, dışa bağımlılıkları minimumda tutarak tek bir HTML dosyası içerisinde gelişmiş bir "Single Page Application (SPA)" deneyimi sunmayı hedefler.
 
-## ✨ Öne Çıkan Özellikler
+✨ Öne Çıkan Özellikler
 
-* 🚀 **Sıfır Kurulum & Sunucusuz Yapı:** Sadece HTML dosyasını açmanız yeterlidir. İnternet bağlantısı olmasa bile tüm liste, notlar ve kurallar çalışmaya devam eder.
-* 📱 **Mobil Uygulama Desteği:** Telefon tarayıcısından açıp "Ana Ekrana Ekle" diyeyebilirsiniz. Sahada kullanım için idealdir.
-* 📍 **Akıllı Bölge Otomasyonu (Regex Engine):** Adres metinlerindeki kelimeleri tarayarak (Örn: "Kadosan", "İMES") işletmeyi doğru sanayi bölgesine otomatik atar. Kurallar tamamen özelleştirilebilir.
-* 📊 **Gelişmiş Çoklu Filtreleme:** Öğretmen, Bölge, Sınıf ve Dal bazlı çoklu seçim (multi-select) ile 1000+ satırlık verilerde milisaniyeler içinde süzme işlemi yapar. Sayfayı dondurmaz.
-* 💾 **Akıllı Excel Yükleme:** Milli Eğitim sistemlerinden alınan Excel listelerini içeri aktarır. Aynı öğrenci numarası (Öğr.No) ile yüklenen listelerde mükerrer kayıt oluşturmaz, sadece değişen verileri günceller.
-* 🗺️ **Nokta Atışı Konum:** Açık adreslerin yanı sıra enlem/boylam koordinat (Örn: `41.005, 29.164`) girişi destekler. Tek tıkla Google Haritalar'da hedefe yönlendirir.
-* 🖨️ **Gelişmiş Raporlama:** Ekranda filtrelenmiş aktif listeyi saniyeler içinde **Excel** veya Türkçe karakter uyumlu **PDF** olarak dışa aktarır. Temiz A4 yazdırma (Print) moduna sahiptir.
-* 🔄 **Tam Yedekleme:** Kurallar ve aktif veriler JSON formatında yedeklenip başka cihazlara tek tıkla aktarılabilir.
+🚀 Sunucusuz & Çok Hızlı: Herhangi bir veritabanı veya backend kurulumu gerektirmez. Tüm veriler tarayıcınızın localStorage alanında güvenle tutulur.
 
-## 🛠️ Kurulum ve Kullanım
+📱 PWA (Progressive Web App): Çevrimdışı (offline) çalışabilir. Telefonunuza, tabletinize veya bilgisayarınıza yerel bir uygulama gibi yüklenebilir.
 
-Sistem bağımsız bir frontend aracıdır. Kullanmak için bilgisayarınıza veya sunucuya hiçbir şey kurmanıza gerek yoktur.
+📊 Excel Entegrasyonu: Yüzlerce veya binlerce öğrenci kaydını (SheetJS kullanarak) saniyeler içinde içe/dışa aktarabilirsiniz. Çift kayıtları (duplicate) akıllıca tespit eder ve günceller.
 
-1. Bu depodaki HTML dosyasını indirin.
-2. Dosyaya çift tıklayarak herhangi bir tarayıcıda (Chrome, Edge, Safari vb.) açın.
-3. **"Excel Yükle"** butonuna basarak elinizdeki öğrenci/işletme listesini sisteme dahil edin.
+🤖 Akıllı Bölge Kural Motoru: Öğrenci/İşletme adreslerindeki metinleri Regex (Düzenli İfadeler) ile analiz ederek, öğrencileri otomatik olarak doğru "Bölgelere" atayan dinamik bir kural motoru içerir.
 
-### 📱 Mobilde Kullanım
-Dosyayı telefonunuza gönderin ve mobil tarayıcıda açın. Tarayıcı menüsünden **"Ana Ekrana Ekle"** seçeneğine dokunun. Uygulama telefonunuza yüklenecektir.
+🔍 Gelişmiş Arama & Filtreleme: Olay Temsilciliği (Event Delegation) tabanlı yüksek performanslı arama çubuğu ve Öğretmen, Bölge, Sınıf, Dal bazlı akıllı Multi-Select filtreler.
 
-## 📁 Excel Veri Şablonu
+💾 Tam Yedekleme & Arşiv: Öğrencileri silmek yerine arşivleyebilme, sistemin o anki tam durumunu (kurallar dahil) JSON formatında dışa aktarma ve geri yükleme imkanı.
 
-İçeri aktarılacak Excel dosyasındaki başlıkların (ilk satır) sistem tarafından otomatik tanınması için aşağıdaki formatta (veya benzer varyasyonlarda) olması tavsiye edilir:
+🗺️ Google Maps Entegrasyonu: İşletme adreslerini veya özel koordinatları tek tıkla haritada açma.
 
-* `Öğr.No` (veya Öğrenci No, No) -> Zorunlu benzersiz anahtar
-* `Ad Soyad` 
-* `Sınıf` 
-* `Dal`
-* `Öğretmen` 
-* `Firma Adı` (veya İşletme, Tespit Edilen Firma)
-* `İşyeri Adresi` (veya Adres, Temiz Adres)
-* `Notlar` (Opsiyonel)
-* `Koordinat` (Opsiyonel)
+🖨️ Özelleştirilmiş Yazdırma Görünümü: Tabloları yazdırırken gereksiz butonları ve ID'leri gizleyen temiz CSS @media print tasarımı.
 
-## 💻 Kullanılan Teknolojiler
-* **HTML5, CSS3, Vanilla JavaScript** (Framework kullanılmamıştır, maksimum hız hedeflenmiştir.)
-* **SheetJS** - Excel içe/dışa aktarım işlemleri için.
-* **jsPDF & jsPDF-AutoTable** - PDF raporlama işlemleri için.
-* **FontAwesome** - Vektörel ikonlar.
+🛠️ Kullanılan Teknolojiler
 
-## 🤝 Katkıda Bulunma
-Projeyi geliştirmek, hata bildirmek veya yeni özellik önermek isterseniz Pull Request oluşturabilir veya Issues sekmesini kullanabilirsiniz. Eğitim camiasına faydalı olması dileğiyle!
+HTML5 & CSS3: Modern, esnek (Flexbox/Grid) ve mobil uyumlu (Responsive) arayüz.
+
+Vanilla JavaScript (ES6+): Framework (React, Vue vb.) kullanılmadan, Closure mimarisi ve DOM optimizasyonları ile geliştirilmiş saf Javascript gücü.
+
+SheetJS (xlsx): İstemci tarafında Excel dosyası okuma ve yazma işlemleri için.
+
+FontAwesome: İkon setleri için.
+
+🚀 Kurulum ve Kullanım
+
+Bu uygulama hiçbir sunucu mimarisine ihtiyaç duymaz. Kullanmaya başlamak dünyanın en kolay işidir:
+
+Bu depoyu klonlayın veya doğrudan repo içindeki MESEM_Portal_V24.html (veya güncel sürüm) dosyasını indirin.
+
+İndirdiğiniz HTML dosyasına çift tıklayarak modern bir web tarayıcısında (Chrome, Edge, Safari, Firefox vb.) açın.
+
+İşte bu kadar! Kurallarınızı oluşturmaya ve Excel'den verilerinizi yüklemeye başlayabilirsiniz.
+
+🧠 Teknik Mimari ve Geliştirici Notları
+
+Proje tek bir dosya olmasına rağmen "Spagetti Kod" oluşumunu engellemek için kurumsal standartlarda yazılmıştır:
+
+Closure ve Scope Yönetimi: Tüm Javascript mantığı DOMContentLoaded içinde bir IIFE (Immediately Invoked Function Expression) benzeri yapı ile sarmalanarak global 'window' kirliliği önlenmiştir.
+
+DOM Optimizasyonu: Yüzlerce veriyi ekrana çizerken tarayıcının donmaması için innerHTML += döngüleri yerine, HTML string'leri bir Array içerisinde (bellekte) toplanıp .join('') metoduyla tek seferde render edilmektedir (Minimize Reflow/Repaint).
+
+Event Delegation: Tablo satırları veya liste öğeleri gibi dinamik çoğalan elementlere tek tek "event listener" eklemek yerine, kapsayıcı (parent) elementler üzerinden dinleme yapılarak yüksek performans sağlanmıştır.
+
+🤝 Katkıda Bulunma
+
+Eğitim kurumlarına destek olmak veya projeyi geliştirmek isterseniz pull request'lerinizi bekliyoruz! Lütfen PR göndermeden önce kodun mevcut mimarisine (Single File ve Vanilla JS) sadık kaldığınızdan emin olun.
+
+Bu repoyu forklayın
+
+Kendi feature branch'inizi oluşturun (git checkout -b feature/YeniOzellik)
+
+Değişikliklerinizi commit edin (git commit -m 'Harika bir özellik eklendi')
+
+Branch'inizi pushlayın (git push origin feature/YeniOzellik)
+
+Bir Pull Request oluşturun.
+
+📄 Lisans
+
+Bu proje eğitimcilerin işini kolaylaştırmak amacıyla açık kaynak olarak geliştirilmiştir. Kendi ihtiyaçlarınıza göre özgürce değiştirebilir ve kullanabilirsiniz (MIT License).
