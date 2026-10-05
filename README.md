@@ -1,4 +1,4 @@
-💼 MESEM Portal - Gelişmiş Koordinatörlük Sistemi
+💼 MESEM Portal
 
 Mesleki Eğitim Merkezleri (MESEM) koordinatör öğretmenleri için geliştirilmiş, tamamen tarayıcı üzerinde çalışan, sunucusuz (serverless) ve çevrimdışı destekli (PWA) öğrenci ve işletme takip otomasyonu.
 
