@@ -2,70 +2,72 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1e293b">
+    <link rel="manifest" href='data:application/manifest+json;utf8,{"name": "MESEM Portal", "short_name": "MESEM", "start_url": ".", "display": "standalone", "background_color": "#f8fafc", "theme_color": "#1e293b", "icons": [{"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzFlMjkzYiIvPjx0ZXh0IHk9IjY1IiB4PSIyMCIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNTAiPk08L3RleHQ+PC9zdmc+", "sizes": "192x192", "type": "image/svg+xml"}]}'>
+    <title>MESEM Portal</title>
     
-    <title>MESEM Portal V14</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root { --primary: #10b981; --primary-dark: #059669; --bg: #f8fafc; --text: #334155; --border: #cbd5e1; --card: #ffffff; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent;}
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden;}
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        .navbar { background-color: #1e293b; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0;}
+        .navbar { background-color: #1e293b; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 50; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; }
         .navbar h1 { margin: 0; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .nav-links { display: flex; gap: 10px; }
-        .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 500; cursor: pointer; padding: 6px 10px; border-radius: 6px; transition: 0.2s; font-size: 14px;}
+        .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 500; cursor: pointer; padding: 6px 10px; border-radius: 6px; transition: 0.2s; font-size: 14px; }
         .nav-links a.active, .nav-links a:hover { color: white; background-color: #334155; }
         
-        .container { flex: 1; padding: 15px; overflow: hidden; display: flex; flex-direction: column; position: relative;}
-        .view-section { display: none; height: 100%; flex-direction: column; }
-        .view-section.active { display: block; overflow-y: auto; overflow-x: hidden; padding-bottom: 50px; }
+        .container { flex: 1; padding: 15px 15px 0 15px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .view-section { display: none; height: 100%; flex-direction: column; overflow: hidden; }
+        .view-section.active { display: flex; }
         
-        .action-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: var(--card); padding: 12px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; gap: 10px; }
+        .list-view-inner { display: flex; flex-direction: column; height: 100%; overflow-y: auto; padding-bottom: 15px;}
+        
+        .action-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: var(--card); padding: 12px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; gap: 10px; flex-shrink:0;}
         .search-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; flex: 1; }
-        .search-filters input[type="text"] { padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 14px; min-width: 250px; flex-grow: 1;}
+        .search-filters input[type="text"] { padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 14px; min-width: 250px; flex-grow: 1; }
         
         .ms-group { display: flex; gap: 8px; flex-wrap: wrap; }
         .multi-select { position: relative; width: 160px; }
-        .multi-select-header { padding: 8px 10px; background: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between; align-items: center; user-select: none;}
-        .multi-select-header span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; display: inline-block; vertical-align: bottom;}
+        .multi-select-header { padding: 8px 10px; background: white; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+        .multi-select-header span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; display: inline-block; vertical-align: bottom; }
         .multi-select-header:hover { border-color: #94a3b8; }
         .multi-select-options { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 6px; margin-top: 4px; max-height: 250px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); }
         .multi-select-options.open { display: block; }
-        .multi-select-option { padding: 8px 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f1f5f9;}
+        .multi-select-option { padding: 8px 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
         .multi-select-option:active, .multi-select-option:hover { background-color: #f8fafc; }
-        .multi-select-option input[type="checkbox"] { cursor: pointer; width: 16px; height: 16px; margin:0;}
+        .multi-select-option input[type="checkbox"] { cursor: pointer; width: 16px; height: 16px; margin:0; }
 
-        .action-buttons { display: flex; gap: 6px; flex-wrap: wrap;}
-        .btn { padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px; color: white; transition: 0.2s; font-size: 13px;}
+        .action-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn { padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px; color: white; transition: 0.2s; font-size: 13px; margin:0;}
         .btn-excel { background-color: #107c41; } .btn-excel:hover { background-color: #0b5e31; }
-        .btn-pdf { background-color: #e11d48; } .btn-pdf:hover { background-color: #be123c; }
         .btn-print { background-color: #475569; } .btn-print:hover { background-color: #334155; }
-        .btn-import { background-color: #3b82f6; position: relative; overflow: hidden;} .btn-import:hover { background-color: #2563eb; }
+        .btn-import { background-color: #3b82f6; position: relative; overflow: hidden; } .btn-import:hover { background-color: #2563eb; }
         .btn-primary { background-color: var(--primary); } .btn-primary:hover { background-color: var(--primary-dark); }
         .btn-danger { background-color: #ef4444; } .btn-danger:hover { background-color: #dc2626; }
         .btn-warning { background-color: #f59e0b; } .btn-warning:hover { background-color: #d97706; }
         .btn-import input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%; }
         
-        .table-container { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto; overflow-y: visible; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; }
+        .table-container { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow-x: auto; overflow-y: visible; flex-shrink:0; -webkit-overflow-scrolling: touch;}
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1400px; }
         th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
         th { background-color: #f1f5f9; position: sticky; top: 0; z-index: 10; font-weight: 600; color: #475569; user-select: none; border-right: 1px solid #e2e8f0; resize: horizontal; overflow: hidden; }
         th:hover { background-color: #e2e8f0; cursor: pointer; }
         th .th-content { display: flex; align-items: center; justify-content: space-between; }
         th i { margin-left: 5px; color: #94a3b8; font-size: 11px; }
         th.active-sort i { color: var(--primary-dark); }
-        tbody tr:hover { background-color: #f8fafc; }
+        tbody tr:nth-child(even) td { background-color: #f8fafc; }
+        tbody tr:hover td { background-color: #f1f5f9 !important; }
         
         .actions-cell { white-space: nowrap; width: 90px; text-align: center; }
         .narrow-cell { width: 50px; text-align: center; }
+        .col-id { width: 80px; }
         
         .badge { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; background-color: #e2e8f0; }
         .badge-bolge { background-color: #dbeafe; color: #1e40af; }
@@ -84,8 +86,10 @@
         .note-icon { color: #f59e0b; font-size: 16px; cursor: help; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(2px); }
-        .modal { background: white; padding: 20px; border-radius: 12px; width: 500px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal { background: white; padding: 20px; border-radius: 12px; width: 600px; max-width: 95%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal h2 { margin-top: 0; margin-bottom: 15px; font-size: 18px; color: #1e293b; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .form-row { display: flex; gap: 10px; margin-bottom: 12px;}
+        .form-row .form-group { flex: 1; margin-bottom: 0;}
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 600; color: #475569; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-family: inherit; font-size: 14px; background-color: #f8fafc; transition: border 0.2s; }
@@ -94,22 +98,44 @@
         .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
         .btn-cancel { background-color: #e2e8f0; color: #334155; } .btn-cancel:hover { background-color: #cbd5e1; }
 
-        .rules-container { display: flex; gap: 20px; height: 100%; flex-wrap: wrap; overflow-y:auto; }
-        .rules-form { width: 350px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--border); display:flex; flex-direction:column; }
-        .rules-list { flex: 1; min-width: 300px; background: white; border-radius: 8px; border: 1px solid var(--border); overflow-y: visible; padding: 20px; display:flex; flex-direction:column; }
-        .rule-card { border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; }
-        .rule-card h4 { margin: 0 0 5px 0; color: var(--primary-dark); }
-        .rule-card p { margin: 0; font-size: 13px; color: #64748b; line-height: 1.4; }
+        /* YENİ KURALLAR LAYOUT (Grid & Sticky) */
+        .rules-container { display: flex; gap: 20px; height: 100%; overflow: hidden; align-items: flex-start; }
+        .rules-form { width: 350px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--border); display:flex; flex-direction:column; position: sticky; top: 0; max-height: 100%; overflow-y: auto; }
+        
+        .rules-list-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; background: white; border-radius: 8px; border: 1px solid var(--border); padding: 20px; }
+        .rules-list-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px; flex-shrink: 0;}
+        .rules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; overflow-y: auto; padding-right: 5px; align-content: start; flex: 1;}
+        
+        .rule-card { border: 1px solid var(--border); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; background-color: #f8fafc; transition: 0.2s; border-left: 4px solid var(--primary); }
+        .rule-card.inactive-rule { opacity: 0.6; border-left-color: #94a3b8; background-color: #f1f5f9; }
+        .rule-card.inactive-rule h4 { color: #64748b; text-decoration: line-through; }
+        .rule-card-header { display: flex; justify-content: flex-start; align-items: center; gap: 8px; margin-bottom: 5px;}
+        .rule-card h4 { margin: 0; font-size: 14px; color: var(--primary-dark); display: flex; align-items: center; gap: 8px;}
+        .rule-badge { background: #e2e8f0; color: #475569; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        
+        .rule-card details { font-size: 12px; color: #64748b; margin-top: 5px; }
+        .rule-card details summary { cursor: pointer; font-weight: 600; outline: none; user-select: none; }
+        .rule-card-keywords { margin-top: 8px; line-height: 1.4; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 4px; max-height: 120px; overflow-y: auto; word-wrap: break-word;}
+        
+        .rule-card-actions { display: flex; gap: 5px; justify-content: flex-end; margin-top: 10px; padding-top: 8px; border-top: 1px solid #e2e8f0; align-items: center;}
         
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #334155; color: white; padding: 12px 24px; border-radius: 30px; display: none; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 14px; white-space: nowrap; font-weight: 500; }
-        .record-count { font-size: 13px; color: #64748b; font-weight: 600; margin-left: auto; padding-right: 5px; align-self: center; display: flex; gap: 10px; align-items: center;}
+        .record-count { font-size: 13px; color: #64748b; font-weight: 600; margin-left: auto; padding-right: 5px; align-self: center; display: flex; gap: 10px; align-items: center; }
+
+        @media (max-width: 900px) {
+            .rules-container { flex-direction: column; overflow: visible; height: auto;}
+            .rules-form { width: 100%; position: relative; max-height: none; overflow: visible;}
+            .rules-list-wrapper { width: 100%; height: auto; overflow: visible;}
+            .rules-grid { overflow: visible;}
+        }
 
         @media (max-width: 768px) {
             .navbar { flex-direction: column; gap: 12px; padding: 15px; text-align: center; }
             .nav-links { flex-wrap: wrap; justify-content: center; gap: 8px; }
             .nav-links a { font-size: 13px; padding: 8px 12px; background-color: rgba(255,255,255,0.1); border-radius: 20px; }
             
-            .container { padding: 10px; }
+            .container { padding: 10px; overflow-y: auto;}
+            .view-section.active { padding-bottom: 20px;}
             .action-bar { padding: 10px; flex-direction: column; align-items: stretch; gap: 12px; }
             .search-filters input[type="text"] { width: 100%; min-width: 100%; }
             
@@ -117,7 +143,7 @@
             .multi-select { width: 100%; }
             .multi-select-header { padding: 10px; font-size: 12px; }
             
-            .record-count { text-align: center; margin: 5px 0; width: 100%; justify-content:center;}
+            .record-count { text-align: center; margin: 5px 0; width: 100%; justify-content:center; }
             
             .action-buttons { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 8px; }
             .btn { justify-content: center; padding: 10px; font-size: 12px; }
@@ -127,9 +153,11 @@
             
             .modal { padding: 15px; width: 95%; border-radius: 15px; }
             .modal h2 { font-size: 16px; margin-bottom: 10px; }
+            .form-row { flex-direction: column; gap: 0;}
             .form-group input, .form-group textarea, .form-group select { padding: 12px; font-size: 16px; } 
         }
 
+        /* YAZDIRMA EKRANI - ID GİZLEME */
         @media print {
             body { background: white; height: auto; display: block; overflow: visible;}
             .navbar, .action-bar, .nav-links, .toast, .modal-overlay { display: none !important; }
@@ -137,37 +165,39 @@
             
             .view-section { display: none !important; }
             .view-section.active { display: block !important; height: auto !important; overflow: visible !important;}
+            .list-view-inner { overflow: visible !important; padding-bottom: 0 !important; }
             
             .table-container { border: none; overflow: visible; box-shadow: none; height: auto;}
-            table { width: 100% !important; border-collapse: collapse; min-width: 100%; }
-            th, td { border: 1px solid #000; padding: 6px; font-size: 11px; white-space: normal !important; word-wrap: break-word; }
+            table { width: 100% !important; min-width: auto !important; border-collapse: collapse; }
+            th, td { border: 1px solid #000; padding: 4px 6px; font-size: 9.5px !important; white-space: normal !important; word-wrap: break-word; }
             th { background-color: #eee !important; color: #000; position: static; resize: none; border: 1px solid #000; }
             th .th-content i { display: none; }
             
-            .actions-cell, .narrow-cell { display: none !important; } 
+            .actions-cell, .narrow-cell, .col-id { display: none !important; } 
             .badge { border: none; background: transparent !important; color: #000 !important; padding:0; font-weight:normal; }
-            @page { size: landscape; margin: 10mm; }
+            @page { size: landscape A4; margin: 5mm; }
         }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <h1><i class="fas fa-mobile-alt"></i> MESEM Portal V14</h1>
+        <h1><i class="fas fa-briefcase"></i> MESEM Portal</h1>
         <div class="nav-links">
             <a class="active" onclick="switchTab('main')"><i class="fas fa-list"></i> Liste</a>
             <a onclick="switchTab('rules')"><i class="fas fa-cog"></i> Kurallar</a>
             <a onclick="switchTab('archive')"><i class="fas fa-archive"></i> Arşiv</a>
-            <a onclick="factoryReset()" title="Sıfırla"><i class="fas fa-sync"></i></a>
+            <a onclick="factoryReset()" title="Sistemi Sıfırla"><i class="fas fa-sync"></i></a>
         </div>
     </div>
 
     <div class="container">
         <!-- ANA LİSTE -->
         <div id="view-main" class="view-section active">
+          <div class="list-view-inner">
             <div class="action-bar">
                 <div class="search-filters">
-                    <input type="text" id="searchInput" placeholder="Hızlı Ara (No, İsim, Firma...)" onkeyup="triggerRender()">
+                    <input type="text" id="searchInput" placeholder="Hızlı Ara (Id, No, İsim, Firma...)" onkeyup="triggerRender()">
                     
                     <div class="ms-group">
                         <div class="multi-select" id="ms-ogretmen">
@@ -188,9 +218,7 @@
                         </div>
                     </div>
 
-                    <div class="record-count" id="recordCount">
-                        <!-- Buraya Öğrenci ve İşletme sayısı gelecek -->
-                    </div>
+                    <div class="record-count" id="recordCount"></div>
                 </div>
                 <div class="action-buttons">
                     <label class="btn btn-import" style="margin:0;">
@@ -198,9 +226,8 @@
                         <input type="file" id="excelUpload" accept=".xlsx, .xls" onchange="importExcel(event)" style="display:none;">
                     </label>
                     <button class="btn btn-excel" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Excel</button>
-                    <button class="btn btn-pdf" onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
                     <button class="btn btn-print" onclick="window.print()"><i class="fas fa-print"></i> Yazdır</button>
-                    <button class="btn btn-warning" onclick="exportBackup()"><i class="fas fa-database"></i> Tam Yedek</button>
+                    <button class="btn btn-warning" onclick="exportBackup()"><i class="fas fa-database"></i> Yedek Al</button>
                     <label class="btn btn-import" style="margin:0;"><i class="fas fa-history"></i> Yedek Yükle<input type="file" accept=".json" onchange="importBackup(event)" style="display:none;"></label>
                 </div>
             </div>
@@ -209,12 +236,16 @@
                 <table id="mainTable">
                     <thead>
                         <tr>
+                            <th class="col-id"><div class="th-content" onclick="sortBy('internalId')" id="th-internalId">Id <i class="fas fa-sort"></i></div></th>
                             <th style="width: 80px;"><div class="th-content" onclick="sortBy('ogrNo')" id="th-ogrNo">No <i class="fas fa-sort"></i></div></th>
                             <th style="width: 140px;"><div class="th-content" onclick="sortBy('adSoyad')" id="th-adSoyad">Ad Soyad <i class="fas fa-sort"></i></div></th>
                             <th style="width: 120px;"><div class="th-content" onclick="sortBy('sinif')" id="th-sinif">Sınıf/Dal <i class="fas fa-sort"></i></div></th>
                             <th style="width: 140px;"><div class="th-content" onclick="sortBy('ogretmen')" id="th-ogretmen">Öğretmen <i class="fas fa-sort"></i></div></th>
-                            <th style="width: 180px;"><div class="th-content" onclick="sortBy('isletme')" id="th-isletme">İşletme <i class="fas fa-sort"></i></div></th>
-                            <th style="width: 250px;"><div class="th-content" onclick="sortBy('adres')" id="th-adres">İşyeri Adresi <i class="fas fa-sort"></i></div></th>
+                            <th style="width: 160px;"><div class="th-content" onclick="sortBy('isletme')" id="th-isletme">İşletme <i class="fas fa-sort"></i></div></th>
+                            <th style="width: 100px;"><div class="th-content" onclick="sortBy('isyeriTel')" id="th-isyeriTel">İşyeri Tel <i class="fas fa-sort"></i></div></th>
+                            <th style="width: 120px;"><div class="th-content" onclick="sortBy('ustaOgretici')" id="th-ustaOgretici">Usta Öğretici <i class="fas fa-sort"></i></div></th>
+                            <th style="width: 100px;"><div class="th-content" onclick="sortBy('ogrTel')" id="th-ogrTel">Öğrenci Tel <i class="fas fa-sort"></i></div></th>
+                            <th style="width: 200px;"><div class="th-content" onclick="sortBy('adres')" id="th-adres">İşyeri Adresi <i class="fas fa-sort"></i></div></th>
                             <th style="width: 100px;"><div class="th-content" onclick="sortBy('bolge')" id="th-bolge">Bölge <i class="fas fa-sort"></i></div></th>
                             <th title="Kısa Not" class="narrow-cell">Not</th>
                             <th title="Haritada Aç" class="narrow-cell">Konum</th>
@@ -224,6 +255,7 @@
                     <tbody id="tableBody"></tbody>
                 </table>
             </div>
+          </div>
         </div>
 
         <!-- BÖLGE KURALLARI -->
@@ -231,24 +263,31 @@
             <div class="rules-container">
                 <div class="rules-form">
                     <h3 id="ruleFormTitle">Bölge Kuralı Ekle / Düzenle</h3>
-                    <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Aşağıya yazdığınız kelimeler adreste geçiyorsa, işletme otomatik olarak o bölgeye atanır.</p>
+                    <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Kurallar <strong style="color:var(--primary-dark)">yukarıdan aşağıya</strong> sırayla çalışır. Üstteki kuralın her zaman önceliği vardır.</p>
+                    
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <input type="text" id="ruleSearchInput" placeholder="Kurallarda Ara..." onkeyup="renderRules()" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; outline:none; font-size:13px;">
+                    </div>
+                    
                     <input type="hidden" id="editRuleIndex" value="-1">
                     <div class="form-group">
                         <label>Bölge Adı</label>
-                        <input type="text" id="ruleName" placeholder="Örn: 1. Bölge">
+                        <input type="text" id="ruleName" list="regionNameList" placeholder="Açılır listeden seçin veya yazın..." autocomplete="off">
+                        <datalist id="regionNameList"></datalist>
                     </div>
                     <div class="form-group" style="flex:1;">
                         <label>Anahtar Kelimeler (Virgülle ayırın)</label>
-                        <textarea id="ruleKeywords" rows="6" placeholder="KADOSAN, KDS..."></textarea>
+                        <textarea id="ruleKeywords" rows="6" placeholder="Örn: KADOSAN, KDS..."></textarea>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:auto;">
                         <button class="btn btn-cancel" style="flex:1; justify-content:center;" onclick="resetRuleForm()">İptal</button>
-                        <button class="btn btn-primary" style="flex:2; justify-content:center;" onclick="saveRule()">Kaydet & Uygula</button>
+                        <button class="btn btn-primary" style="flex:2; justify-content:center;" onclick="saveRule()">Kaydet</button>
                     </div>
                 </div>
-                <div class="rules-list">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
-                        <h3 style="margin:0;">Aktif Bölge Kuralları</h3>
+                
+                <div class="rules-list-wrapper">
+                    <div class="rules-list-header">
+                        <h3 style="margin:0;">Bölge Öncelik Sıralaması</h3>
                         <div style="display:flex; gap:10px;">
                             <button class="btn btn-warning" onclick="exportRules()"><i class="fas fa-download"></i> İndir</button>
                             <label class="btn btn-import" style="margin:0;">
@@ -257,13 +296,16 @@
                             </label>
                         </div>
                     </div>
-                    <div id="rulesListContainer"></div>
+                    <div id="rulesListContainer" class="rules-grid">
+                        <!-- Grid Items -->
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- ARŞİV -->
         <div id="view-archive" class="view-section">
+          <div class="list-view-inner">
             <div class="action-bar">
                 <h3 style="margin:0;">Arşivlenmiş Kayıtlar</h3>
                 <div class="search-filters">
@@ -274,13 +316,14 @@
                 <table id="archiveTable">
                     <thead>
                         <tr>
-                            <th>No</th><th>Ad Soyad</th><th>Öğretmen</th><th>İşletme</th><th>Bölge</th>
+                            <th class="col-id">Id</th><th>No</th><th>Ad Soyad</th><th>Öğretmen</th><th>İşletme</th><th>Bölge</th>
                             <th class="actions-cell">Geri Al</th>
                         </tr>
                     </thead>
                     <tbody id="archiveBody"></tbody>
                 </table>
             </div>
+          </div>
         </div>
     </div>
 
@@ -291,9 +334,9 @@
             <input type="hidden" id="editIndex">
             
             <div class="form-group">
-                <label>Öğretmen Değiştir (Yazın veya Seçin)</label>
-                <input type="text" id="editOgretmen" list="teacherList" placeholder="Listeden seçin veya yeni yazın..." autocomplete="off">
-                <datalist id="teacherList"></datalist>
+                <label>Öğretmen</label>
+                <select id="editOgretmenSelect" onchange="checkTeacherSelect()"></select>
+                <input type="text" id="editOgretmenInput" style="display:none; margin-top:8px;" placeholder="Yeni öğretmen adı yazın...">
             </div>
             
             <div class="form-group">
@@ -301,26 +344,42 @@
                 <input type="text" id="editIsletme">
             </div>
             
+            <div class="form-row">
+                <div class="form-group">
+                    <label>İşyeri Tel</label>
+                    <input type="text" id="editIsyeriTel">
+                </div>
+                <div class="form-group">
+                    <label>Usta Öğretici</label>
+                    <input type="text" id="editUstaOgretici">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Öğrenci Tel</label>
+                    <input type="text" id="editOgrTel">
+                </div>
+                <div class="form-group">
+                    <label>Bölge Ataması (Sabit)</label>
+                    <select id="editBolgeSelect" style="border: 2px solid var(--primary); font-weight:bold; color:var(--primary-dark);"></select>
+                </div>
+            </div>
+            
             <div class="form-group">
                 <label>İşyeri Adresi</label>
                 <textarea id="editAdres" rows="2"></textarea>
             </div>
             
-            <div class="form-group">
-                <label>Bölge Ataması (Elle Değiştirilebilir)</label>
-                <select id="editBolgeSelect" style="border: 2px solid var(--primary); font-weight:bold; color:var(--primary-dark);"></select>
-                <span class="help-text">OTOMATİK seçili kalırsa kurallara göre adres taraması yapar. Sabit bir bölge seçerseniz sistem atamayı değiştirmez.</span>
-            </div>
-            
-            <div class="form-group">
-                <label>Kısa Not <span class="help-text">(Usta tel no, ziyaret günü vb.)</span></label>
-                <input type="text" id="editNotlar" placeholder="Örn: Salı günleri ustabaşı yok">
-            </div>
-            
-            <div class="form-group">
-                <label>Nokta Atışı Konum / Koordinat</label>
-                <input type="text" id="editKoordinat" placeholder="Örn: 41.005, 29.164">
-                <span class="help-text">Konum varsa harita butonu adresi değil doğrudan bu koordinatı açar.</span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Kısa Not</label>
+                    <input type="text" id="editNotlar" placeholder="Örn: Salı günleri yok">
+                </div>
+                <div class="form-group">
+                    <label>Nokta Konum</label>
+                    <input type="text" id="editKoordinat" placeholder="41.005, 29.164">
+                </div>
             </div>
             
             <div class="modal-actions">
@@ -333,14 +392,24 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        const defaultRecords = [];
-        const defaultRules = [{"name": "\u00c7akmak Sanayi", "keywords": "AK SAN, K\u00dc\u00c7\u00dcK SAN, SARAY, DEN\u0130Z SAN, DEN\u0130Z SONAY, YAMANEVLER, G\u00dcVEN, GUVEN"}, {"name": "Kadosan", "keywords": "KADOSAN, KODOSAN, KDS"}, {"name": "DES Sanayi Sitesi", "keywords": "DES"}, {"name": "\u0130MES Sanayi Sitesi", "keywords": "\u0130MES, IMES"}, {"name": "Tepe\u00fcst\u00fc", "keywords": "TEPE\u00dcST\u00dc, TEPEUSTU"}, {"name": "Alemda\u011f B\u00f6lgesi", "keywords": "ALEMDA\u011e, ALEMDAG"}, {"name": "Dudullu OSB", "keywords": "OSB, DUDULLU, DUDULU"}];
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                const swCode = `self.addEventListener('install', (e) => e.waitUntil(self.skipWaiting()));
+                                self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+                                self.addEventListener('fetch', (e) => {});`;
+                const blob = new Blob([swCode], {type: 'application/javascript'});
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl).catch(()=>{});
+            });
+        }
+
+        const defaultRules = [{"name": "PARSELLER MAH", "keywords": ["PARSELLER MAH"], "active": true}, {"name": "NAMIK KEMAL", "keywords": ["NAMIK KEMAL"], "active": true}, {"name": "MEHMET AKİF MAH", "keywords": ["MEHMET AKİF MAH", "MEHMET AKİF MAHALLESİ"], "active": true}, {"name": "ÇAKMAK MAH", "keywords": ["ÇAKMAK MAH"], "active": true}, {"name": "NECİP FAZIL MAH", "keywords": ["NECİP FAZIL MAH", "NECİP FAZIL MH", "N.FAZIL MAH"], "active": true}, {"name": "İSTİKLAL MAH", "keywords": ["İSTİKLAL MAH", "İSTİKLAL ÜMRANİYE"], "active": true}, {"name": "DUMLUPINAR MH", "keywords": ["DUMLUPINAR MH", "DUMLUPINAR MAH"], "active": true}, {"name": "ATAKENT", "keywords": ["ATAKENT"], "active": true}, {"name": "CEMİL MERİÇ MAH", "keywords": ["CEMİL MERİÇ MAH"], "active": true}, {"name": "SANCAKTEPE", "keywords": ["SANCAKTEPE", "SARIGAZİ", "MECLİS MAH"], "active": true}, {"name": "MALTEPE", "keywords": ["MALTEPE"], "active": true}, {"name": "ADEM YAVUZ", "keywords": ["ADEM YAVUZ"], "active": true}, {"name": "ÜSKÜDAR", "keywords": ["ÜSKÜDAR"], "active": true}, {"name": "TATLISU", "keywords": ["TATLISU", "TATLI SU"], "active": true}, {"name": "ALTINŞEHİR", "keywords": ["ALTINŞEHİR"], "active": true}, {"name": "HUZUR MAH", "keywords": ["HUZUR MAH"], "active": true}, {"name": "ELMALIKENT", "keywords": ["ELMALIKENT"], "active": true}, {"name": "KADIKÖY", "keywords": ["KADIKÖY", "BOSTANCI"], "active": true}, {"name": "ATAŞEHİR", "keywords": ["ATAŞEHİR", "İÇERENKÖY"], "active": true}, {"name": "ARMAĞANEVLER", "keywords": ["ARMAĞANEVLER"], "active": true}, {"name": "YAVUZTÜRK", "keywords": ["YAVUZTÜRK"], "active": true}, {"name": "İNKILAP", "keywords": ["İNKILAP", "İNKİLAP MAH"], "active": true}, {"name": "ESENKENT", "keywords": ["ESENKENT"], "active": true}, {"name": "TANTAVİ", "keywords": ["TANTAVİ"], "active": true}, {"name": "ŞERİFALİ", "keywords": ["ŞERİFALİ", "ŞERİF ALİ"], "active": true}, {"name": "IHLAMURKUYU", "keywords": ["IHLAMURKUYU"], "active": true}, {"name": "ESENŞEHİR", "keywords": ["ESENŞEHİR", "ESENSEHIR", "EŞENŞEHİR", "ESENİŞEHİR", "E.ŞEHİR"], "active": true}, {"name": "Çakmak Sanayi", "keywords": ["AK SAN", "KÜÇÜK SAN", "SARAY", "DENİZ SAN", "DENİZ SONAY", "YAMANEVLER", "GÜVEN", "GUVEN", "BİRLİK SAN", "ÖMER FAİK ATAKAN CAD", "GÜMRÜKÇÜLER", "FATİH SULTAN MEHMET SAN", "BİRLİK SANAYİ SİTESİ", "F.S.M", "DENİZ SANAYİ SİTESİ", "FSM", "FATİH S.MEHMET", "F.SULTAN MEHMET", "KÜÇÜK SANAYİ SİTESİ", "FATİH SANAYİ SİTESİ", "AK SANAYİ", "ÖZENTAŞ", "FATİHSULTAN MEH SAN"], "active": true}, {"name": "FATİH SULTAN MEHMET MAH", "keywords": ["FATİH SULTAN MEHMET MAH"], "active": true}, {"name": "Ümraniye Belediyesi", "keywords": ["ÜMRANİYE BELEDİYE", "BELEDİYE BİNASI"], "active": true}, {"name": "Kadosan", "keywords": ["KADOSAN", "KODOSAN", "KDS", "KODASAN", "KADOSAN OTO SAN", "KADOSAN SANAYİ", "KADOSAN OTO SAN Sİ"], "active": true}, {"name": "DES Sanayi Sitesi", "keywords": ["DES"], "active": true}, {"name": "İMES Sanayi Sitesi", "keywords": ["İMES", "IMES"], "active": true}, {"name": "Tepeüstü", "keywords": ["TEPEÜSTÜ", "TEPEUSTU"], "active": true}, {"name": "Alemdağ Bölgesi", "keywords": ["ALEMDAĞ", "ALEMDAG"], "active": true}, {"name": "Dudullu OSB", "keywords": ["OSB", "DUDULLU", "DUDULU", "YUKARIDUDULLU", "ORGANİZE SAN"], "active": true}, {"name": "MİMAR SİNAN MAH", "keywords": ["MİMAR SİNAN MAH"], "active": true}, {"name": "TAŞDELEN MAH", "keywords": ["TAŞDELEN MAH"], "active": true}, {"name": "NİŞANTEPE MAH", "keywords": ["NİŞANTEPE MAH"], "active": true}, {"name": "KAZIM KARABEKİR MAH", "keywords": ["KAZIM KARABEKİR MAH"], "active": true}, {"name": "KİRAZLIDERE MAH", "keywords": ["KİRAZLIDERE MAH"], "active": true}, {"name": "AYDINLAR MAH", "keywords": ["AYDINLAR MAH"], "active": true}, {"name": "FERHATPAŞA MAH", "keywords": ["FERHATPAŞA MAH"], "active": true}, {"name": "EMEK MAH", "keywords": ["EMEK MAH"], "active": true}, {"name": "SİTE MAH", "keywords": ["SİTE MAH"], "active": true}, {"name": "ATATÜRK MAH", "keywords": ["ATATÜRK MAH"], "active": true}];
         
         let records = [];
         let regionRules = [];
         let compiledRules = [];
         
-        let sortCol = 'ogrNo';
+        let sortCol = 'internalId';
         let sortDesc = false;
 
         let msData = { ogretmen: [], bolge: [], sinif: [], dal: [] };
@@ -355,6 +424,7 @@
             updateFilters();
             renderTable('main');
             renderRules();
+            updateRegionDatalist();
         };
         
         document.addEventListener('click', function(event) {
@@ -364,34 +434,57 @@
             }
         });
 
+        /* --- VERİ YÖNETİMİ --- */
         function initData() {
-            let savedRecords = localStorage.getItem('kordRecordsV13');
+            let savedRecords = localStorage.getItem('mesemRecordsV23') || localStorage.getItem('mesemRecordsV22') || localStorage.getItem('mesemRecordsV21') || localStorage.getItem('mesemRecordsV20') || localStorage.getItem('mesemRecordsV19') || localStorage.getItem('mesemRecordsV18') || localStorage.getItem('kordRecordsV17');
             if (savedRecords) { records = JSON.parse(savedRecords); } 
-            else { records = JSON.parse(JSON.stringify(defaultRecords)); }
+            else { records = []; }
 
-            let savedRules = localStorage.getItem('kordRulesV13');
-            if (savedRules) { regionRules = JSON.parse(savedRules); } 
-            else { regionRules = JSON.parse(JSON.stringify(defaultRules)); }
+            let savedRules = localStorage.getItem('mesemRulesV23') || localStorage.getItem('mesemRulesV22') || localStorage.getItem('mesemRulesV21') || localStorage.getItem('mesemRulesV20') || localStorage.getItem('mesemRulesV19') || localStorage.getItem('mesemRulesV18') || localStorage.getItem('kordRulesV17');
+            if (savedRules) { 
+                regionRules = JSON.parse(savedRules); 
+            } else { 
+                regionRules = JSON.parse(JSON.stringify(defaultRules)); 
+            }
+            
+            regionRules.forEach(r => { 
+                if(r.active === undefined) r.active = true; 
+                if(Array.isArray(r.keywords)) r.keywords = r.keywords.join(', ');
+            });
+            
+            records.forEach(r => {
+                if (String(r.ogrNo).startsWith('0.')) {
+                    r.ogrNo = "ID-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+                    r.internalId = r.ogrNo; 
+                }
+                if(!r.internalId) r.internalId = r.ogrNo || ("ID-" + Math.random().toString(36).substr(2, 6).toUpperCase());
+                r.ogrNo = String(r.ogrNo || r.internalId);
+                
+                if(r.ogrTel === undefined) r.ogrTel = "";
+                if(r.isyeriTel === undefined) r.isyeriTel = "";
+                if(r.ustaOgretici === undefined) r.ustaOgretici = "";
+            });
         }
 
         function saveData() {
-            localStorage.setItem('kordRecordsV13', JSON.stringify(records));
-            localStorage.setItem('kordRulesV13', JSON.stringify(regionRules));
+            localStorage.setItem('mesemRecordsV23', JSON.stringify(records));
+            localStorage.setItem('mesemRulesV23', JSON.stringify(regionRules));
         }
         
         function factoryReset() {
             let msg = "TÜM SİSTEMİ SIFIRLAMAK ÜZERESİNİZ!\n\nYaptığınız tüm değişiklikler, adresler, notlar ve kurallar kalıcı olarak silinecek. Emin misiniz?";
             if(confirm(msg)) {
                 exportBackup();
-                localStorage.removeItem('kordRecordsV13');
-                localStorage.removeItem('kordRulesV13');
+                localStorage.removeItem('mesemRecordsV23'); localStorage.removeItem('mesemRulesV23');
+                localStorage.removeItem('mesemRecordsV22'); localStorage.removeItem('mesemRulesV22');
+                localStorage.removeItem('mesemRecordsV21'); localStorage.removeItem('mesemRulesV21');
+                localStorage.removeItem('mesemRecordsV20'); localStorage.removeItem('mesemRulesV20');
+                localStorage.removeItem('mesemRecordsV19'); localStorage.removeItem('mesemRulesV19');
+                localStorage.removeItem('mesemRecordsV18'); localStorage.removeItem('mesemRulesV18');
+                
                 msSelected = { ogretmen: [], bolge: [], sinif: [], dal: [] };
-                initData();
-                compileRules();
-                recalculateRegions();
-                updateFilters();
-                renderTable('main');
-                renderRules();
+                initData(); compileRules(); recalculateRegions(); updateFilters();
+                renderTable('main'); renderRules(); updateRegionDatalist();
                 showToast("Sistem ilk haline sıfırlandı.");
             }
         }
@@ -407,18 +500,20 @@
 
         function showToast(msg) {
             let t = document.getElementById('toast');
-            t.innerText = msg; t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 3000);
         }
 
-        /* --- V14: YARDIMCILAR --- */
         function escapeHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
         function escRec(r){ const o={}; for(const k in r){ o[k] = typeof r[k]==='string' ? escapeHtml(r[k]) : r[k]; } return o; }
-        const TR_ASCII = {'Ç':'C','Ğ':'G','İ':'I','Ö':'O','Ş':'S','Ü':'U'};
-        function normTR(s){ return String(s||'').toLocaleUpperCase('tr-TR').replace(/[ÇĞİÖŞÜ]/g, m => TR_ASCII[m]); }
+        
+        const TR_ASCII = {'Ç':'C','Ğ':'G','İ':'I','Ö':'O','Ş':'S','Ü':'U', 'ç':'C','ğ':'G','ı':'I','ö':'O','ş':'S','ü':'U', 'i':'I'};
+        function normTR(s){ return String(s||'').toLocaleUpperCase('tr-TR').replace(/[ÇĞİÖŞÜçğıöşüi]/g, m => TR_ASCII[m]); }
+        function escapeRegExp(str) { return str.replace(/[-\\/\\\\^$*+?.()|[\\]{}]/g, '\\\\$&'); }
 
         function exportBackup() {
-            const blob = new Blob([JSON.stringify({version:14, date:new Date().toISOString(), records:records, rules:regionRules}, null, 1)], {type:'application/json'});
+            const blob = new Blob([JSON.stringify({version:23, date:new Date().toISOString(), records:records, rules:regionRules}, null, 1)], {type:'application/json'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = 'MESEM_Yedek_' + new Date().toISOString().slice(0,10) + '.json';
@@ -426,36 +521,19 @@
             setTimeout(() => URL.revokeObjectURL(a.href), 1000);
             showToast('Tam yedek (arşiv dahil) indirildi.');
         }
-        function importBackup(event) {
-            let f = event.target.files[0]; if(!f) return;
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    let d = JSON.parse(e.target.result);
-                    if(!d || !Array.isArray(d.records) || !Array.isArray(d.rules)) { alert('Geçersiz yedek dosyası!'); return; }
-                    if(!confirm(d.records.length + ' kayıt ve ' + d.rules.length + ' kural yüklenecek. Mevcut veriler değiştirilecek. Devam edilsin mi?')) return;
-                    records = d.records; regionRules = d.rules;
-                    compileRules(); recalculateRegions(); renderRules(); updateFilters(); renderTable('main'); renderTable('archive');
-                    showToast('Yedek yüklendi.');
-                } catch(err) { alert('Yedek dosyası okunamadı!'); }
-            };
-            reader.readAsText(f); event.target.value = '';
-        }
-        function moveRule(idx, dir) {
-            let j = idx + dir; if(j < 0 || j >= regionRules.length) return;
-            [regionRules[idx], regionRules[j]] = [regionRules[j], regionRules[idx]];
-            saveData(); compileRules(); renderRules(); recalculateRegions(); renderTable('main');
-        }
-
+        
         /* --- HIZLI REGEX MOTORU --- */
         function compileRules() {
             compiledRules = [];
             regionRules.forEach(rule => {
-                if (!rule || !rule.keywords) return;
-                let keywords = rule.keywords.split(',').map(k => normTR(k.trim())).filter(k => k.length > 0);
+                if (!rule || !rule.keywords || rule.active === false) return;
+                
+                let kwsString = Array.isArray(rule.keywords) ? rule.keywords.join(',') : rule.keywords;
+                let keywords = kwsString.split(',').map(k => normTR(k.trim())).filter(k => k.length > 0);
+                
                 let regexes = keywords.map(kw => {
-                    let escaped = kw.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-                    return new RegExp("(^|[\\s\\W])" + escaped + "([\\s\\W]|$)", "i");
+                    let escaped = escapeRegExp(kw);
+                    return new RegExp("(?:^|[^A-Z0-9])" + escaped + "(?:[^A-Z0-9]|$)", "i");
                 });
                 compiledRules.push({ name: rule.name, keywords: keywords, regexes: regexes });
             });
@@ -477,7 +555,7 @@
             saveData();
         }
 
-        /* --- SIRALAMA --- */
+        /* --- SAYISAL SIRALAMA (NUMERIC SORTING) --- */
         function sortBy(col) {
             if(sortCol === col) sortDesc = !sortDesc;
             else { sortCol = col; sortDesc = false; }
@@ -496,14 +574,15 @@
         function sortData(data) {
             return data.sort((a, b) => {
                 let v1 = a[sortCol] || ''; let v2 = b[sortCol] || '';
-                if(sortCol === 'ogrNo') {
-                    v1 = parseInt(String(v1).replace(/\D/g, '')) || 0; 
-                    v2 = parseInt(String(v2).replace(/\D/g, '')) || 0;
-                } else if(sortCol === 'sinif') {
-                    v1 = parseInt(v1) || 0; v2 = parseInt(v2) || 0;
-                } else {
-                    v1 = v1.toString().toLowerCase(); v2 = v2.toString().toLowerCase();
+                
+                if (sortCol === 'internalId' || sortCol === 'ogrNo' || sortCol === 'sinif') {
+                    let res = String(v1).localeCompare(String(v2), undefined, {numeric: true, sensitivity: 'base'});
+                    return sortDesc ? -res : res;
                 }
+                
+                v1 = String(v1).toLocaleLowerCase('tr-TR'); 
+                v2 = String(v2).toLocaleLowerCase('tr-TR');
+                
                 if (v1 < v2) return sortDesc ? 1 : -1;
                 if (v1 > v2) return sortDesc ? -1 : 1;
                 return 0;
@@ -588,7 +667,6 @@
             renderTimer = setTimeout(() => { renderTable('main'); }, 100); 
         }
 
-        /* --- TABLO RENDER --- */
         function renderTable(type) {
             let tbody = type === 'main' ? document.getElementById('tableBody') : document.getElementById('archiveBody');
             let searchInputElem = type === 'main' ? document.getElementById('searchInput') : document.getElementById('archiveSearchInput');
@@ -606,7 +684,7 @@
                 }
                 
                 if(sInput) {
-                    let s = `${r.ogrNo} ${r.adSoyad} ${r.ogretmen} ${r.isletme} ${r.bolge} ${r.adres} ${r.dal} ${r.notlar}`.toLocaleLowerCase('tr-TR');
+                    let s = `${r.internalId} ${r.ogrNo} ${r.adSoyad} ${r.ogretmen} ${r.isletme} ${r.bolge} ${r.adres} ${r.dal} ${r.notlar} ${r.ogrTel} ${r.isyeriTel} ${r.ustaOgretici}`.toLocaleLowerCase('tr-TR');
                     return s.includes(sInput);
                 }
                 return true;
@@ -614,9 +692,7 @@
 
             if(type === 'main') {
                 filtered = sortData(filtered);
-                // BENZERSİZ İŞLETME SAYISINI BULMA 
                 let unqIsletme = new Set(filtered.filter(r => r.isletme && r.isletme.trim() !== "").map(r => r.isletme.trim().toUpperCase()));
-                
                 document.getElementById('recordCount').innerHTML = `<i class="fas fa-user-graduate" style="color:var(--primary-dark);"></i> ${filtered.length} Öğrenci &nbsp;|&nbsp; <i class="fas fa-building" style="color:var(--primary-dark);"></i> ${unqIsletme.size} İşletme`;
             }
 
@@ -633,15 +709,21 @@
                 
                 let cleanNote = escapeHtml(rr.notlar || '');
                 let noteHtml = cleanNote.length > 0 ? `<i class="fas fa-comment-dots note-icon" title="${cleanNote}" data-note="${cleanNote}" onclick="alert('NOT:\n' + this.dataset.note)"></i>` : '';
+                
+                let ogrNoDisp = (r.ogrNo && !String(r.ogrNo).startsWith('ID-')) ? r.ogrNo : '<span style="color:#94a3b8;">' + (r.ogrNo||'') + '</span>';
 
                 if(type === 'main') {
                     html += `<tr>
-                        <td><strong>${r.ogrNo}</strong></td>
+                        <td class="col-id"><span style="font-size:11px; color:#64748b;">${r.internalId}</span></td>
+                        <td><strong>${ogrNoDisp}</strong></td>
                         <td>${r.adSoyad}</td>
-                        <td><div><span class="badge badge-info">${r.sinif}</span><br><span style="font-size:11px; color:#64748b;">${r.dal}</span></div></td>
+                        <td><div><span class="badge badge-info">${r.sinif}</span><br><span style="font-size:10px; color:#64748b; white-space:normal;">${r.dal}</span></div></td>
                         <td>${r.ogretmen}</td>
                         <td><span style="color:var(--primary-dark); font-weight:500;">${r.isletme}</span></td>
-                        <td>${r.adres} ${coordBadge}</td>
+                        <td>${r.isyeriTel}</td>
+                        <td><div style="max-width:120px; overflow:hidden; text-overflow:ellipsis;">${r.ustaOgretici}</div></td>
+                        <td>${r.ogrTel}</td>
+                        <td><div style="white-space:normal; font-size:12px;" title="${r.adres}">${r.adres}</div>${coordBadge}</td>
                         <td><span class="badge badge-bolge">${r.bolge}</span></td>
                         <td class="narrow-cell">${noteHtml}</td>
                         <td class="narrow-cell">
@@ -654,7 +736,8 @@
                     </tr>`;
                 } else {
                     html += `<tr>
-                        <td><strong>${r.ogrNo}</strong></td><td>${r.adSoyad}</td><td>${r.ogretmen}</td>
+                        <td class="col-id"><span style="font-size:11px; color:#64748b;">${r.internalId}</span></td>
+                        <td><strong>${ogrNoDisp}</strong></td><td>${r.adSoyad}</td><td>${r.ogretmen}</td>
                         <td>${r.isletme}</td><td><span class="badge badge-bolge">${r.bolge}</span></td>
                         <td class="actions-cell"><i class="fas fa-undo action-icon icon-restore" title="Geri Al" onclick="toggleArchive(${idx})"></i></td>
                     </tr>`;
@@ -675,23 +758,34 @@
             document.getElementById('editIndex').value = idx;
             
             let t = [...new Set(records.map(rec => rec.ogretmen))].filter(Boolean).sort();
-            let dl = document.getElementById('teacherList');
-            dl.innerHTML = '';
+            let sel = document.getElementById('editOgretmenSelect');
+            sel.innerHTML = `<option value="YENI_EKLE">++ Yeni Öğretmen Ekle ++</option>`;
             
-            t.forEach(x => { dl.innerHTML += `<option value="${escapeHtml(x)}">`; });
+            t.forEach(x => { sel.innerHTML += `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`; });
             
-            document.getElementById('editOgretmen').value = r.ogretmen || '';
+            let inp = document.getElementById('editOgretmenInput');
+            if(t.includes(r.ogretmen)) {
+                sel.value = escapeHtml(r.ogretmen);
+                inp.style.display = 'none'; inp.value = '';
+            } else {
+                sel.value = "YENI_EKLE";
+                inp.style.display = 'block'; inp.value = escapeHtml(r.ogretmen || '');
+            }
+
             document.getElementById('editIsletme').value = r.isletme;
             document.getElementById('editAdres').value = r.adres;
             document.getElementById('editKoordinat').value = r.koordinat || '';
             document.getElementById('editNotlar').value = r.notlar || '';
+            document.getElementById('editOgrTel').value = r.ogrTel || '';
+            document.getElementById('editIsyeriTel').value = r.isyeriTel || '';
+            document.getElementById('editUstaOgretici').value = r.ustaOgretici || '';
             
             let bSel = document.getElementById('editBolgeSelect');
             bSel.innerHTML = `<option value="AUTO">-- OTOMATİK HESAPLA --</option>`;
             let allRegions = [...new Set([...regionRules.map(ru=>ru.name), ...records.map(rec=>rec.bolge)])].filter(Boolean).sort();
             allRegions.forEach(x => { bSel.innerHTML += `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`; });
             
-            if(r.manuelBolge) { bSel.value = r.bolge; } else { bSel.value = "AUTO"; }
+            if(r.manuelBolge) { bSel.value = escapeHtml(r.bolge); } else { bSel.value = "AUTO"; }
 
             document.getElementById('editModal').style.display = 'flex';
         }
@@ -702,15 +796,35 @@
 
         function closeModal() { document.getElementById('editModal').style.display = 'none'; }
         
+        function checkTeacherSelect() {
+            let val = document.getElementById('editOgretmen').value;
+            let inp = document.getElementById('editOgretmenInput');
+            if(val === '++ Yeni Öğretmen Ekle ++') { 
+                inp.style.display = 'block'; 
+                inp.focus(); 
+            } else { 
+                inp.style.display = 'none'; 
+                inp.value = ''; 
+            }
+        }
+
         function saveEdit() {
             let idx = document.getElementById('editIndex').value;
             let oAdres = records[idx].adres;
             
-            records[idx].ogretmen = document.getElementById('editOgretmen').value.trim();
+            let tVal = document.getElementById('editOgretmen').value.trim();
+            if(tVal === '++ Yeni Öğretmen Ekle ++') {
+                tVal = document.getElementById('editOgretmenInput').value.trim();
+            }
+            records[idx].ogretmen = tVal;
+            
             records[idx].isletme = document.getElementById('editIsletme').value;
             records[idx].adres = document.getElementById('editAdres').value;
             records[idx].koordinat = document.getElementById('editKoordinat').value.trim();
             records[idx].notlar = document.getElementById('editNotlar').value.trim();
+            records[idx].ogrTel = document.getElementById('editOgrTel').value.trim();
+            records[idx].isyeriTel = document.getElementById('editIsyeriTel').value.trim();
+            records[idx].ustaOgretici = document.getElementById('editUstaOgretici').value.trim();
             
             let bSelValue = document.getElementById('editBolgeSelect').value;
             if (bSelValue === "AUTO") {
@@ -728,16 +842,40 @@
             showToast("Kayıt başarıyla güncellendi.");
         }
 
-        /* --- KURALLAR --- */
+        /* --- KURALLAR YÖNETİMİ --- */
         function renderRules() {
             let c = document.getElementById('rulesListContainer'); c.innerHTML = '';
+            let sInput = document.getElementById('ruleSearchInput').value.toLocaleLowerCase('tr-TR');
+            
             regionRules.forEach((rule, idx) => {
-                let div = document.createElement('div'); div.className = 'rule-card';
+                if(sInput) {
+                    let s = `${rule.name} ${Array.isArray(rule.keywords)?rule.keywords.join(' '):rule.keywords}`.toLocaleLowerCase('tr-TR');
+                    if(!s.includes(sInput)) return;
+                }
+                
+                let div = document.createElement('div'); 
+                div.className = `rule-card ${rule.active === false ? 'inactive-rule' : ''}`;
+                
+                let eyeIcon = rule.active === false ? 'fa-eye-slash' : 'fa-eye';
+                let kwsString = Array.isArray(rule.keywords) ? rule.keywords.join(', ') : rule.keywords;
+                let kwHtml = escapeHtml(kwsString);
+                
                 div.innerHTML = `
-                    <div><h4>${escapeHtml(rule.name)}</h4><p>${escapeHtml(rule.keywords)}</p></div>
-                    <div style="white-space:nowrap;">
-                        <i class="fas fa-arrow-up action-icon" onclick="moveRule(${idx},-1)" title="Yukarı (öncelik artar)"></i>
-                        <i class="fas fa-arrow-down action-icon" onclick="moveRule(${idx},1)" title="Aşağı"></i>
+                    <div style="flex:1;">
+                        <div class="rule-card-header">
+                            <span class="rule-badge">#${idx + 1}</span>
+                            <h4>${escapeHtml(rule.name)}</h4>
+                        </div>
+                        <details>
+                            <summary>Kelimeleri Gör</summary>
+                            <div class="rule-card-keywords">${kwHtml}</div>
+                        </details>
+                    </div>
+                    <div class="rule-card-actions">
+                        <i class="fas ${eyeIcon} action-icon" onclick="toggleRuleActive(${idx})" title="Aç / Kapat"></i>
+                        <i class="fas fa-angle-double-up action-icon" onclick="moveToTop(${idx})" title="En Başa Taşı" style="color: #3b82f6;"></i>
+                        <i class="fas fa-arrow-up action-icon" onclick="moveRule(${idx},-1)" title="Yukarı Taşı"></i>
+                        <i class="fas fa-arrow-down action-icon" onclick="moveRule(${idx},1)" title="Aşağı Taşı"></i>
                         <i class="fas fa-edit action-icon icon-edit" onclick="editRule(${idx})" title="Düzenle"></i>
                         <i class="fas fa-trash action-icon icon-delete" onclick="deleteRule(${idx})" title="Sil"></i>
                     </div>
@@ -745,19 +883,60 @@
                 c.appendChild(div);
             });
         }
+        
+        function updateRegionDatalist() {
+            let dl = document.getElementById('regionNameList');
+            if(!dl) return;
+            dl.innerHTML = '';
+            let names = [...new Set(regionRules.map(r => r.name))].sort();
+            names.forEach(n => {
+                dl.innerHTML += `<option value="${escapeHtml(n)}">`;
+            });
+        }
+        
+        function toggleRuleActive(idx) {
+            if(regionRules[idx].active === undefined) regionRules[idx].active = true;
+            regionRules[idx].active = !regionRules[idx].active;
+            compileRules(); renderRules(); recalculateRegions(); renderTable('main');
+            saveData();
+            showToast(regionRules[idx].active ? "Kural aktif edildi." : "Kural pasif yapıldı.");
+        }
+        
+        function moveToTop(idx) {
+            if(idx === 0) return;
+            let item = regionRules.splice(idx, 1)[0];
+            regionRules.unshift(item);
+            compileRules(); renderRules(); recalculateRegions(); renderTable('main');
+            saveData();
+        }
+
+        function moveRule(idx, dir) {
+            let target = idx + dir;
+            if (target < 0 || target >= regionRules.length) return;
+            let temp = regionRules[idx];
+            regionRules[idx] = regionRules[target];
+            regionRules[target] = temp;
+            compileRules(); renderRules(); recalculateRegions(); renderTable('main');
+            saveData();
+        }
+        
         function editRule(idx) {
             let rule = regionRules[idx];
             document.getElementById('ruleName').value = rule.name;
-            document.getElementById('ruleKeywords').value = rule.keywords;
+            let kwsString = Array.isArray(rule.keywords) ? rule.keywords.join(', ') : rule.keywords;
+            document.getElementById('ruleKeywords').value = kwsString;
             document.getElementById('editRuleIndex').value = idx;
             document.getElementById('ruleFormTitle').innerText = "Kuralı Düzenle";
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
+        
         function resetRuleForm() {
             document.getElementById('ruleName').value = '';
             document.getElementById('ruleKeywords').value = '';
             document.getElementById('editRuleIndex').value = '-1';
             document.getElementById('ruleFormTitle').innerText = "Yeni Bölge Kuralı Ekle";
         }
+        
         function saveRule() {
             let name = document.getElementById('ruleName').value.trim();
             let kws = document.getElementById('ruleKeywords').value.trim();
@@ -765,74 +944,85 @@
             
             if(!name || !kws) { alert("Boş bırakılamaz!"); return; }
             
+            let keywordArray = kws.split(',').map(x=>x.trim()).filter(x=>x.length>0);
+            
             if(idx > -1) {
-                regionRules[idx] = {name: name, keywords: kws}; 
+                regionRules[idx].name = name;
+                regionRules[idx].keywords = keywordArray;
             } else {
                 let eIdx = regionRules.findIndex(r => r.name.toLowerCase() === name.toLowerCase());
                 if(eIdx >= 0) {
-                    let existingKws = regionRules[eIdx].keywords.split(',').map(x=>x.trim().toLowerCase());
+                    let existingKws = (Array.isArray(regionRules[eIdx].keywords) ? regionRules[eIdx].keywords.join(', ') : regionRules[eIdx].keywords).split(',').map(x=>x.trim().toLowerCase());
                     let newKws = kws.split(',').map(x=>x.trim());
                     let toAdd = newKws.filter(x => !existingKws.includes(x.toLowerCase()));
                     if(toAdd.length > 0) {
-                        regionRules[eIdx].keywords += ", " + toAdd.join(', ');
+                        regionRules[eIdx].keywords = regionRules[eIdx].keywords.concat(toAdd);
                     }
                 } else {
-                    regionRules.unshift({name: name, keywords: kws}); 
+                    regionRules.unshift({name: name, keywords: keywordArray, active: true}); 
                 }
             }
             resetRuleForm(); compileRules(); renderRules(); recalculateRegions(); renderTable('main');
+            updateRegionDatalist();
             saveData();
             showToast("Kural kaydedildi, liste güncellendi.");
         }
+        
         function deleteRule(idx) {
             if(confirm("Silmek istediğinize emin misiniz?")) {
                 regionRules.splice(idx, 1);
                 compileRules(); renderRules(); recalculateRegions(); renderTable('main');
+                updateRegionDatalist();
                 saveData();
                 showToast("Kural silindi.");
             }
         }
 
-        /* --- EXCEL/JSON İÇE/DIŞA AKTAR --- */
-        function exportRules() {
-            if(regionRules.length === 0) { showToast("Aktarılacak kural yok!"); return; }
-            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(regionRules, null, 2));
-            let downloadNode = document.createElement('a');
-            downloadNode.setAttribute("href", dataStr);
-            downloadNode.setAttribute("download", "bolge_kurallari.json");
-            document.body.appendChild(downloadNode);
-            downloadNode.click();
-            downloadNode.remove();
-            showToast("Kurallar indirildi.");
-        }
-
-        function importRules(event) {
-            let file = event.target.files[0];
-            if(!file) return;
+        /* --- YEDEK YÜKLEME --- */
+        function importBackup(event) {
+            let inputElem = event.target;
+            let f = inputElem.files[0]; 
+            if(!f) return;
             
             let reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    let importedRules = JSON.parse(e.target.result);
-                    if(Array.isArray(importedRules)) {
-                        regionRules = importedRules;
-                        saveData();
-                        compileRules();
-                        recalculateRegions();
-                        renderRules();
-                        renderTable('main');
-                        showToast("Kurallar başarıyla yüklendi!");
-                    } else {
-                        alert("Hatalı dosya formatı!");
+                    let d = JSON.parse(e.target.result);
+                    if(!d || !Array.isArray(d.records) || !Array.isArray(d.rules)) { 
+                        alert('Geçersiz veya bozuk yedek dosyası!'); 
+                        inputElem.value = ''; 
+                        return; 
                     }
-                } catch(err) {
-                    alert("Dosya okunamadı veya bozuk!");
+                    if(!confirm(d.records.length + ' adet öğrenci kaydı ve ' + d.rules.length + ' adet bölge kuralı yüklenecek. Mevcut veriler silinecek. Onaylıyor musunuz?')) {
+                        inputElem.value = ''; 
+                        return;
+                    }
+                    
+                    records = d.records; 
+                    regionRules = d.rules;
+                    
+                    regionRules.forEach(r => { if(r.active === undefined) r.active = true; });
+                    
+                    saveData(); // Yüklenen yedeği kalıcı hafızaya yazdır
+                    
+                    compileRules(); 
+                    recalculateRegions(); 
+                    renderRules(); 
+                    updateFilters(); 
+                    updateRegionDatalist(); 
+                    renderTable('main'); 
+                    renderTable('archive');
+                    
+                    showToast('Yedek başarıyla yüklendi.');
+                } catch(err) { 
+                    alert('HATA: Yedek dosyası okunamadı!'); 
                 }
+                inputElem.value = ''; // Dosya okuma işlemi bitince seçimi sıfırla ki tekrar aynı dosyayı yükleyebilsin
             };
-            reader.readAsText(file);
-            event.target.value = ''; 
+            reader.readAsText(f, 'UTF-8');
         }
 
+        /* --- EXCEL YÜKLEME --- */
         function importExcel(e) {
             let f = e.target.files[0]; if(!f) return;
             let reader = new FileReader();
@@ -843,47 +1033,91 @@
                     let ws = wb.Sheets[wb.SheetNames[0]];
                     let json = XLSX.utils.sheet_to_json(ws);
                     
+                    let importedIdsThisSession = new Set();
                     let added = 0; let updated = 0; let skipped = 0; let snapshot = JSON.stringify(records);
+                    
                     json.forEach(row => {
-                        let rawNo = String(row['Öğr.No'] || row['ogrNo'] || row['Öğrenci No'] || row['Ogr.No'] || row['No'] || '');
-                        let oNo = rawNo.replace(/\.0$/, '').trim();
-                        if(oNo === "undefined" || oNo === "") { skipped++; return; }
+                        let rawId = row['Id'] ?? row['id'] ?? row['Öğr.Id'] ?? row['Ogr.Id'] ?? row['Öğrenci Id'];
+                        let internalId = rawId !== undefined && rawId !== null ? String(rawId).trim() : "";
                         
-                        let ism = row['Firma'] || row['Firma Adı'] || row['Tespit Edilen Firma'] || row['İşletme'] || row['isletme'] || '';
-                        let adr = row['Adres'] || row['Temiz Adres'] || row['İşyeri Adresi'] || row['adres'] || '';
-                        let ogrt = row['Öğretmen'] || row['ogretmen'] || '';
+                        let rawONo = row['Öğr.No'] ?? row['ogrNo'] ?? row['Öğrenci No'] ?? row['Ogr.No'] ?? row['No'] ?? row['Numara'];
+                        let oNo = rawONo !== undefined && rawONo !== null ? String(rawONo).replace(/\.0$/, '').trim() : "";
+                        
+                        if (!internalId && !oNo) {
+                            internalId = "ID-" + Math.random().toString(36).substr(2, 6).toUpperCase() + Date.now().toString(36).toUpperCase();
+                        } else if (!internalId) {
+                            internalId = oNo;
+                        }
+                        if(!oNo) oNo = internalId; 
+                        
+                        let ad = row['Ad Soyad'] || row['Adı Soyadı'] || row['Öğrenci Adı'] || row['adSoyad'] || row['İsim'] || '';
+                        let ism = row['Firma'] || row['Firma Adı'] || row['Tespit Edilen Firma'] || row['İşletme'] || row['isletme'] || row['İşletme Adı'] || '';
+                        let adr = row['Adres'] || row['Temiz Adres'] || row['İşyeri Adresi'] || row['adres'] || row['İşletme Adresi'] || '';
+                        let ogrt = row['Öğretmen'] || row['Koordinatör Öğretmen'] || row['ogretmen'] || '';
                         let kord = row['Koordinat'] || row['koordinat'] || row['Konum'] || '';
                         let ntlr = row['Not'] || row['Notlar'] || row['notlar'] || '';
-                        let sinif = row['Sınıf'] || row['sinif'] || '';
-                        let dal = row['Dal'] || row['dal'] || '';
-                        let ad = row['Ad Soyad'] || row['Adı Soyadı'] || '';
+                        let sinif = row['Sınıf'] || row['Sınıfı'] || row['sinif'] || '';
+                        let dal = row['Dal'] || row['Dalı'] || row['Alan/Dal'] || row['dal'] || '';
                         
-                        let existing = records.find(r => String(r.ogrNo) === oNo);
+                        let ogrTel = row['Öğrenci Tel'] || row['Öğr. Tel'] || row['Ogr Tel'] || row['Telefon'] || row['Tel'] || '';
+                        let isyeriTel = row['İşyeri Tel'] || row['İşletme Tel'] || row['Firma Tel'] || '';
+                        let ustaOgretici = row['Usta Öğretici'] || row['Usta Ogretici'] || row['Eğitici Personel'] || row['Usta'] || '';
+                        
+                        if (!ad && !ism && !adr && !oNo) { skipped++; return; } 
+                        
+                        let existing = null;
+                        
+                        if (internalId !== "") {
+                            existing = records.find(r => String(r.internalId) === internalId);
+                        } else if (oNo !== "") {
+                            existing = records.find(r => String(r.ogrNo) === oNo && !importedIdsThisSession.has(r.internalId));
+                        }
                         
                         if(existing) {
+                            if(!existing.internalId || existing.internalId === existing.ogrNo) {
+                                existing.internalId = "ID-" + Math.random().toString(36).substr(2, 6).toUpperCase() + Date.now().toString(36).toUpperCase();
+                            }
                             if(ism && ism !== existing.isletme) existing.isletme = ism;
-                            if(adr && adr !== existing.adres) { existing.adres = adr; }
+                            if(adr && adr !== existing.adres) { existing.adres = adr; existing.manuelBolge = false; }
                             if(ogrt && ogrt !== existing.ogretmen) existing.ogretmen = ogrt;
                             if(kord && kord !== existing.koordinat) existing.koordinat = kord;
                             if(ntlr && ntlr !== existing.notlar) existing.notlar = ntlr;
                             if(sinif && String(sinif).replace(/\.0$/, '') !== existing.sinif) existing.sinif = String(sinif).replace(/\.0$/, '');
                             if(dal && dal !== existing.dal) existing.dal = dal;
+                            
+                            if(ogrTel && ogrTel !== existing.ogrTel) existing.ogrTel = ogrTel;
+                            if(isyeriTel && isyeriTel !== existing.isyeriTel) existing.isyeriTel = isyeriTel;
+                            if(ustaOgretici && ustaOgretici !== existing.ustaOgretici) existing.ustaOgretici = ustaOgretici;
+                            
+                            importedIdsThisSession.add(existing.internalId);
                             updated++;
                         } else {
                             records.push({ 
-                                ogrNo: oNo, adSoyad: ad, sinif: String(sinif).replace(/\.0$/, ''), dal: dal, 
-                                ogretmen: ogrt, isletme: ism, adres: adr, bolge: "Belirtilmemiş / Diğer", 
-                                koordinat: kord, notlar: ntlr, manuelBolge: false, isArchived: false 
+                                internalId: internalId,
+                                ogrNo: oNo || internalId, 
+                                adSoyad: ad, sinif: String(sinif).replace(/\.0$/, ''), dal: dal, 
+                                ogretmen: ogrt, isletme: ism, adres: adr, bolge: "Belirtilmemiş", 
+                                koordinat: kord, notlar: ntlr, 
+                                ogrTel: ogrTel, isyeriTel: isyeriTel, ustaOgretici: ustaOgretici,
+                                manuelBolge: false, isArchived: false 
                             });
+                            importedIdsThisSession.add(internalId);
                             added++;
                         }
                     });
                     recalculateRegions(); renderTable('main');
                     saveData();
-                    if(!confirm(`${added} yeni kayıt, ${updated} güncelleme, ${skipped} satır (numarasız) atlandı.\n\nUygulansın mı?`)) { records = JSON.parse(snapshot); recalculateRegions(); renderTable('main'); showToast('İçe aktarma iptal edildi.'); return; }
-                    showToast(`Yükleme Bitti: ${added} Yeni, ${updated} Güncellenen, ${skipped} Atlanan.`);
+                    
+                    if(!confirm(`${added} yeni kayıt, ${updated} güncelleme tespit edildi.\n(${skipped} boş satır atlandı)\n\nListeye uygulansın mı?`)) { 
+                        records = JSON.parse(snapshot); 
+                        recalculateRegions(); 
+                        renderTable('main'); 
+                        showToast('İçe aktarma işlemi iptal edildi.'); 
+                        return; 
+                    }
+                    showToast(`Yükleme Bitti: ${added} Yeni, ${updated} Güncellendi.`);
                 } catch(err) {
-                    alert("Excel yüklenirken bir hata oluştu.");
+                    alert("Hata: Excel yüklenirken bir sorun oluştu.");
                 }
             };
             reader.readAsArrayBuffer(f); document.getElementById('excelUpload').value = ''; 
@@ -898,7 +1132,7 @@
                 if(msSelected.sinif.length > 0 && !msSelected.sinif.includes(r.sinif)) return false;
                 if(msSelected.dal.length > 0 && !msSelected.dal.includes(r.dal)) return false;
                 if(sInput) {
-                    return `${r.ogrNo} ${r.adSoyad} ${r.ogretmen} ${r.isletme} ${r.bolge} ${r.adres} ${r.dal} ${r.notlar}`.toLocaleLowerCase('tr-TR').includes(sInput);
+                    return `${r.internalId} ${r.ogrNo} ${r.adSoyad} ${r.ogretmen} ${r.isletme} ${r.bolge} ${r.adres} ${r.dal} ${r.notlar} ${r.ogrTel} ${r.isyeriTel} ${r.ustaOgretici}`.toLocaleLowerCase('tr-TR').includes(sInput);
                 }
                 return true;
             }));
@@ -907,56 +1141,27 @@
         function exportToExcel() {
             let data = getFiltered();
             if(!data.length) return showToast("Dışarı aktarılacak kayıt yok!");
-            let exp = data.map(r => ({'Öğr.No': r.ogrNo, 'Ad Soyad': r.adSoyad, 'Sınıf': r.sinif, 'Dal': r.dal, 'Öğretmen': r.ogretmen, 'Firma': r.isletme, 'Adres': r.adres, 'Bölge': r.bolge, 'Koordinat': r.koordinat, 'Not': r.notlar }));
+            let exp = data.map(r => ({
+                'Id': r.internalId,
+                'Öğr.No': r.ogrNo, 
+                'Ad Soyad': r.adSoyad, 
+                'Sınıf': r.sinif, 
+                'Dal': r.dal, 
+                'Öğretmen': r.ogretmen, 
+                'Firma': r.isletme, 
+                'İşyeri Tel': r.isyeriTel, 
+                'Usta Öğretici': r.ustaOgretici, 
+                'Öğrenci Tel': r.ogrTel,
+                'Adres': r.adres, 
+                'Bölge': r.bolge, 
+                'Koordinat': r.koordinat, 
+                'Not': r.notlar 
+            }));
             let ws = XLSX.utils.json_to_sheet(exp); let wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Liste");
             XLSX.writeFile(wb, "Koordinatorluk_Yedek.xlsx");
         }
 
-        const trMap = {'ç':'c', 'ğ':'g', 'ş':'s', 'ö':'o', 'ü':'u', 'ı':'i', 'Ç':'C', 'Ğ':'G', 'Ş':'S', 'Ö':'O', 'Ü':'U', 'İ':'I'};
-        const cleanTR = (text) => {
-            if (text === null || text === undefined) return '';
-            return String(text).replace(/[çğşöüıÇĞŞÖÜİ]/g, m => trMap[m]);
-        };
-
-        function exportToPDF() {
-            let data = getFiltered();
-            if(!data.length) return showToast("Dışarı aktarılacak kayıt yok!");
-            
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('landscape'); 
-            
-            let tableData = data.map(r => [
-                r.ogrNo, 
-                cleanTR(r.adSoyad), 
-                cleanTR(r.ogretmen), 
-                cleanTR(r.isletme), 
-                cleanTR(r.bolge), 
-                cleanTR(r.adres),
-                cleanTR(r.notlar)
-            ]);
-            
-            doc.setFontSize(14);
-            doc.text("Koordinatorluk Tablosu (Filtrelenmis)", 14, 15);
-            
-            doc.autoTable({
-                head: [['Ogr.No', 'Ad Soyad', 'Ogretmen', 'Firma', 'Bolge', 'Adres', 'Not']],
-                body: tableData,
-                startY: 22,
-                styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
-                columnStyles: {
-                    0: { cellWidth: 15 },
-                    1: { cellWidth: 32 },
-                    2: { cellWidth: 32 },
-                    3: { cellWidth: 40 },
-                    4: { cellWidth: 25 },
-                    5: { cellWidth: 'auto' },
-                    6: { cellWidth: 25 }
-                },
-                margin: { top: 20, left: 10, right: 10 }
-            });
-            doc.save('Koordinatorluk_Listesi.pdf');
-        }
     </script>
 </body>
 </html>
