@@ -6,13 +6,13 @@ Tamamen tek bir HTML dosyası (Single Page Application) olarak tasarlanmıştır
 
 ✨ Temel Özellikler
 
-🚀 Anında Kullanım: MESEM_Portal.html dosyasını tarayıcınızda açmanız yeterlidir. Tüm veriler tarayıcınızın belleğinde (localStorage) güvenle tutulur.
+🚀 Anında Kullanım: MESEM-Portal.html dosyasını tarayıcınızda açmanız yeterlidir. Tüm veriler tarayıcınızın belleğinde (localStorage) güvenle tutulur.
 
 📊 Excel Desteği: Saniyeler içinde yüzlerce öğrenci kaydını Excel'den içe aktarın veya yedekleyin. Çift kayıtları (duplicate) otomatik tespit eder.
 
 🤖 Akıllı Kural Motoru: Öğrenci adreslerindeki anahtar kelimeleri analiz ederek onları otomatik olarak ilgili "Bölgelere" atar.
 
-📱 PWA (Uygulama) Desteği: İnternet olmadan da çalışır. Telefona, tablete veya bilgisayara yerel bir uygulama gibi yüklenebilir.
+📱 İnternet olmadan da çalışır. Telefona, tablete veya bilgisayara HTML dosyasını indirip kullanabilirsiniz.
 
 🔍 Gelişmiş Filtreleme: Öğretmen, bölge, sınıf ve dal bazlı akıllı filtreler ve anlık arama motoru.
 
@@ -20,7 +20,7 @@ Tamamen tek bir HTML dosyası (Single Page Application) olarak tasarlanmıştır
 
 🛠️ Nasıl Kullanılır?
 
-Projedeki güncel MESEM_Portal_V24.html dosyasını bilgisayarınıza indirin.
+Projedeki güncel HTML dosyasını bilgisayarınıza indirin.
 
 Dosyaya çift tıklayarak herhangi bir modern web tarayıcısında (Chrome, Safari, Edge vb.) açın.
 
