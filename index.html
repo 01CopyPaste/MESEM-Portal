@@ -399,7 +399,11 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
                 </div>
                 <div class="form-group">
                     <label>Nokta Konum</label>
-                    <input type="text" id="editKoordinat" placeholder="41.005, 29.164">
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="editKoordinat" placeholder="41.005, 29.164" style="flex:1; min-width:0;">
+                        <button type="button" id="btnGetLocation" class="btn btn-primary" style="white-space:nowrap;"><i class="fas fa-map-marker-alt"></i> Konumum</button>
+                    </div>
+                    <div id="locInfo" style="font-size:12px; color:#64748b; margin-top:4px;"></div>
                 </div>
             </div>
             
@@ -457,6 +461,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
                 document.getElementById('btnFactoryReset').addEventListener('click', factoryReset);
 
                 // Arama ve Filtre Inputları
+                document.getElementById('btnGetLocation').addEventListener('click', getMyLocation);
                 document.getElementById('searchInput').addEventListener('input', triggerRender);
                 document.getElementById('archiveSearchInput').addEventListener('input', () => renderTable('archive'));
                 document.getElementById('ruleSearchInput').addEventListener('input', renderRules);
@@ -874,7 +879,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 
                 document.getElementById('editIsletme').value = r.isletme;
                 document.getElementById('editAdres').value = r.adres;
-                document.getElementById('editKoordinat').value = r.koordinat || '';
+                document.getElementById('editKoordinat').value = r.koordinat || ''; document.getElementById('locInfo').textContent = '';
                 document.getElementById('editNotlar').value = r.notlar || '';
                 document.getElementById('editOgrTel').value = r.ogrTel || '';
                 document.getElementById('editIsyeriTel').value = r.isyeriTel || '';
@@ -907,6 +912,22 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
                     inp.style.display = 'none'; 
                     inp.value = ''; 
                 }
+            }
+
+            function getMyLocation() {
+                const btn = document.getElementById('btnGetLocation'), info = document.getElementById('locInfo');
+                if (!navigator.geolocation) { info.textContent = 'Bu tarayıcı konum özelliğini desteklemiyor.'; return; }
+                btn.disabled = true; info.textContent = 'Konum alınıyor...';
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const c = pos.coords;
+                    document.getElementById('editKoordinat').value = c.latitude.toFixed(6) + ', ' + c.longitude.toFixed(6);
+                    info.textContent = 'Konum alındı (doğruluk: ~' + Math.round(c.accuracy) + ' m). Kaydet ile onaylayın.';
+                    btn.disabled = false;
+                }, err => {
+                    const m = {1: 'Konum izni verilmedi. Tarayıcı ayarlarından izin verin.', 2: 'Konum belirlenemedi. GPS/internet bağlantısını kontrol edin.', 3: 'Konum alma süresi doldu, tekrar deneyin.'};
+                    info.textContent = m[err.code] || 'Konum alınamadı.';
+                    btn.disabled = false;
+                }, {enableHighAccuracy: true, timeout: 20000, maximumAge: 0});
             }
 
             function saveEdit() {
